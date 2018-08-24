@@ -10,7 +10,9 @@
  */
 
 /**
+ * Abstract class that outputs results and saves responses to DB
  * 
+ * @author Daniele Ambrosino <mail@danieleambrosino.it>
  */
 abstract class Communicator implements SplObserver
 {
@@ -26,6 +28,11 @@ abstract class Communicator implements SplObserver
   protected $requestId;
 
   /**
+   * @var array
+   */
+  protected $responses;
+
+  /**
    * @var Database
    */
   protected $db;
@@ -33,9 +40,22 @@ abstract class Communicator implements SplObserver
   /**
    * @param SplSubject $subject
    */
-  public function update(SplSubject $subject)
+  public final function update(SplSubject $subject)
   {
-    // TODO implement here
+    $this->chatId = $subject->getChatId();
+    $this->requestId = $subject->getRequestId();
+    $this->responses = $subject->getResponses();
+
+    if ( empty($this->responses) )
+    {
+      $this->sendIsTyping();
+      return;
+    }
+    
+    foreach ($this->responses as $response)
+    {
+      $this->sendMessage($response);
+    }
   }
 
   /**
