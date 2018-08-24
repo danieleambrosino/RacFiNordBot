@@ -23,7 +23,7 @@ abstract class Database
   /**
    * Connection handle.
    */
-  protected $handle;
+  protected /*final*/ $handle;
 
   /**
    * Protected constructor to enforce Singleton property.
@@ -111,14 +111,6 @@ abstract class Database
     else
     {
       $results = $this->fetchResults($result);
-      if ( method_exists($result, 'finalize') )
-      {
-        $result->finalize();
-      }
-      elseif ( method_exists($result, 'free') )
-      {
-        $result->free();
-      }
     }
     return $results;
   }
