@@ -71,7 +71,7 @@ abstract class Database
   public abstract function saveRequest(int $id, string $datetime, int $userId, string $text);
 
   /**
-   * Save a response
+   * Saves a response
    * 
    * @param int $id Message's Telegram ID
    * @param string $datetime Message's date and time

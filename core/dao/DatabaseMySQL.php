@@ -21,14 +21,20 @@ class DatabaseMySQL extends Database
 
   protected function __construct()
   {
-    $this->handle = new mysqli(DATABASE_MYSQL_HOST, DATABASE_MYSQL_USERNAME, DATABASE_MYSQL_PASSWORD, DATABASE_MYSQL_DBNAME);
+    $this->handle = new mysqli(
+         DATABASE_MYSQL_HOST,
+         DATABASE_MYSQL_USERNAME,
+         DATABASE_MYSQL_PASSWORD,
+         DATABASE_MYSQL_DBNAME);
   }
 
   /**
-   * @param int $id 
-   * @param string $firstName 
-   * @param string $lastName 
-   * @param string $username
+   * Saves user's data
+   * 
+   * @param int $id User's Telegram ID
+   * @param string $firstName User's first name
+   * @param string $lastName [optional] User's last name
+   * @param string $username [optional] Username
    */
   public function saveUser(int $id, string $firstName, string $lastName = NULL, string $username = NULL)
   {
@@ -38,10 +44,12 @@ class DatabaseMySQL extends Database
   }
 
   /**
-   * @param int $id 
-   * @param string $datetime 
-   * @param int $userId 
-   * @param string $text
+   * Saves the incoming request
+   * 
+   * @param int $id Message's Telegram ID
+   * @param string $datetime Message's date and time
+   * @param int $userId User's ID
+   * @param string $text Text of the request
    */
   public function saveRequest(int $id, string $datetime, int $userId, string $text)
   {
@@ -51,10 +59,12 @@ class DatabaseMySQL extends Database
   }
 
   /**
-   * @param int $id 
-   * @param string $datetime 
-   * @param int $requestId 
-   * @param string $text
+   * Saves a response
+   * 
+   * @param int $id Message's Telegram ID
+   * @param string $datetime Message's date and time
+   * @param int $requestId Request's ID
+   * @param string $text Text of the response
    */
   public function saveResponse(int $id, string $datetime, int $requestId, string $text)
   {
@@ -64,6 +74,11 @@ class DatabaseMySQL extends Database
   }
 
   /**
+   * Prepares the statement with the given query. Throws an ErrorException if
+   * query preparing fails. Then, binds the given values to the prepared
+   * statement and returns the statement object. Throws an ErrorException if
+   * binding fails.
+   * 
    * @param string $query
    * @param array $values
    */
@@ -96,6 +111,7 @@ class DatabaseMySQL extends Database
   }
 
   /**
+   * Fetches results from a database result set.
    * 
    * @param mysqli_result $result
    */
