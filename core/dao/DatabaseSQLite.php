@@ -9,6 +9,8 @@
  * file distributed with this source code.
  */
 
+require_once realpath(__DIR__ . '/../../vendor/autoload.php');
+
 /**
  * Implementation of Database class for SQLite DBMS.
  * 
@@ -20,6 +22,7 @@ class DatabaseSQLite extends Database
   protected function __construct()
   {
     $this->handle = new SQlite3(DATABASE_SQLITE_PATH);
+    parent::__construct();
   }
 
   /**
@@ -60,7 +63,7 @@ class DatabaseSQLite extends Database
    * @param int $requestId Request's ID
    * @param string $text Text of the response
    */
-  public function saveResponse(int $id, string $datetime, string $requestId, string $text)
+  public function saveResponse(int $id, string $datetime, int $requestId, string $text)
   {
     $query = 'INSERT INTO Responses (id, datetime, requestId, text) VALUES (?, ?, ?, ?)';
     $values = [$id, $datetime, $requestId, $text];
