@@ -26,9 +26,9 @@ abstract class Database
   protected $handle;
 
   /**
-   * Private constructor to enforce Singleton property.
+   * Protected constructor to enforce Singleton property.
    */
-  protected function __construct(){}
+  protected abstract function __construct();
 
   /**
    * @return Database If no Database objects have been initialized, it creates
