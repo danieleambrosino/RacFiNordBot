@@ -21,17 +21,18 @@ abstract class Database
   protected static $instance;
 
   /**
-   * 
+   * Connection handle.
    */
   protected $handle;
 
   /**
-   * 
+   * Private constructor to enforce Singleton property.
    */
   private final function __construct();
 
   /**
-   * @return
+   * @return Database If no Database objects have been initialized, it creates
+   * a new one and returns it. Otherwise, it returns the pre-existing object.
    */
   public static function getInstance(): Database
   {
@@ -67,19 +68,68 @@ abstract class Database
   public abstract function saveResponse(int $id, string $datetime, int $requestId, string $text);
 
   /**
-   * @param string $query
-   * @param array $values
+   * Execute a query against the database.
+   * If $values is passed, the query will be treated as a prepared statement
+   * and the values into $values will be bound to it.
+   * This implementation depends on 'bind' and 'fetchResults' methods.
+   * 
+   * @param string $query The query to be execute.
+   * @param array $values [optional] The values to be bound to the query.
    */
-  protected abstract function query(string $query, array $values);
-  
+  protected final function query(string $query, array $values = NULL)
+  {
+    $result = NULL;
+    if ( !empty($values) )
+    {
+      $stmt = $this->bind($query, $values);
+
+      if ( !$stmt )
+      {
+        throw new ErrorException(__METHOD__ . ': unable to bind statement');
+      }
+
+      $result = $stmt->execute();
+    }
+    else
+    {
+      $result = $this->handle->query($query);
+    }
+    
+    if ( FALSE === $result )
+    {
+      throw new ErrorException(__METHOD__ . ': query failed');
+    }
+    else
+    {
+      $resultsArray = $this->fetchResults($result);
+      if ( method_exists($result, 'finalize') )
+      {
+        $result->finalize();
+      }
+      elseif ( method_exists($result, 'free') )
+      {
+        $result->free();
+      }
+    }
+    return $resultsArray;
+  }
+
   /**
    * Prepares the statement with the given query. Throws an ErrorException if
    * query preparing fails. Then, binds the given values to the prepared
    * statement and returns the statement object. Throws an ErrorException if
    * binding fails.
    * 
-   * @param string $query 
-   * @param array $values
+   * @param string $query The query to be execute.
+   * @param array $values The values to be bound to the query.
+   * @returns mixed A database results object, whose type depends on the DBMS.
    */
   protected abstract function bind(string $query, array $values);
+
+  /**
+   * Fetches results from a database result set.
+   * 
+   * @return array A database-independent associative array with results.
+   */
+  protected abstract function fetchResults($result): array;
 }
