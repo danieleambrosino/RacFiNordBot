@@ -28,7 +28,7 @@ abstract class Database
   /**
    * Private constructor to enforce Singleton property.
    */
-  private final function __construct();
+  private final function __construct(){}
 
   /**
    * @return Database If no Database objects have been initialized, it creates
