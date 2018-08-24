@@ -75,6 +75,10 @@ abstract class Database
    * 
    * @param string $query The query to be execute.
    * @param array $values [optional] The values to be bound to the query.
+   * 
+   * @return array|bool An associative array with query results. If the query
+   * if resultless, returns TRUE on success.
+   * @throws ErrorException
    */
   protected final function query(string $query, array $values = NULL)
   {
@@ -94,14 +98,19 @@ abstract class Database
     {
       $result = $this->handle->query($query);
     }
-    
+
     if ( FALSE === $result )
     {
       throw new ErrorException(__METHOD__ . ': query failed');
     }
+
+    if ( TRUE === $result )
+    {
+      $results = TRUE;
+    }
     else
     {
-      $resultsArray = $this->fetchResults($result);
+      $results = $this->fetchResults($result);
       if ( method_exists($result, 'finalize') )
       {
         $result->finalize();
@@ -111,7 +120,7 @@ abstract class Database
         $result->free();
       }
     }
-    return $resultsArray;
+    return $results;
   }
 
   /**
