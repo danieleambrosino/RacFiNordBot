@@ -25,12 +25,17 @@ abstract class Database
   /**
    * Connection handle.
    */
-  protected /* final */ $handle;
+  protected $handle;
 
   /**
    * Protected constructor to enforce Singleton property.
    */
   protected abstract function __construct();
+
+  public function __destruct()
+  {
+    $this->handle->close();
+  }
 
   /**
    * @return Database If no Database objects have been initialized, it creates
