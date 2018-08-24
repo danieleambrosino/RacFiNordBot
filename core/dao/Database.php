@@ -46,10 +46,10 @@ abstract class Database
   /**
    * @param int $id 
    * @param string $firstName 
-   * @param string $lastName 
-   * @param string $username
+   * @param string $lastName [optional]
+   * @param string $username [optional]
    */
-  public abstract function saveUser(int $id, string $firstName, string $lastName, string $username);
+  public abstract function saveUser(int $id, string $firstName, string $lastName = NULL, string $username = NULL);
 
   /**
    * @param int $id 
