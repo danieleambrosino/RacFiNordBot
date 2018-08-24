@@ -10,7 +10,9 @@
  */
 
 /**
+ * Implementation of Database class for SQLite DBMS.
  * 
+ * @author Daniele Ambrosino <mail@danieleambrosino.it>
  */
 class DatabaseSQLite extends Database
 {

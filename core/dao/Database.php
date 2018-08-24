@@ -10,7 +10,9 @@
  */
 
 /**
+ * Manages all interactions to database.
  * 
+ * @author Daniele Ambrosino <mail@danieleambrosino.it>
  */
 abstract class Database
 {
