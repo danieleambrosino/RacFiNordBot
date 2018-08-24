@@ -1,0 +1,25 @@
+{
+  "name": "danieleambrosino/rac-fi-nord-bot",
+  "description": "Il bot Telegram del Rotaract Club Firenze Nord",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Daniele Ambrosino",
+      "email": "mail@danieleambrosino.it"
+    }
+  ],
+  "require": {
+    "google/apiclient": "v2.2.2",
+    "ext-curl": "*",
+    "ext-sqlite3": "*"
+  },
+  "autoload": {
+    "classmap": [
+      "core/"
+    ],
+    "files": [
+      "config/config.php"
+    ]
+  }
+}
