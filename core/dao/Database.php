@@ -67,6 +67,17 @@ abstract class Database
   public abstract function saveResponse(int $id, string $datetime, int $requestId, string $text);
 
   /**
+   * @param string $query
+   * @param array $values
+   */
+  protected abstract function query(string $query, array $values);
+  
+  /**
+   * Prepares the statement with the given query. Throws an ErrorException if
+   * query preparing fails. Then, binds the given values to the prepared
+   * statement and returns the statement object. Throws an ErrorException if
+   * binding fails.
+   * 
    * @param string $query 
    * @param array $values
    */

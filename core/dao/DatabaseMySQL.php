@@ -49,6 +49,16 @@ class DatabaseMySQL extends Database
   }
 
   /**
+   * 
+   * @param string $query
+   * @param array $values
+   */
+  protected function query(string $query, array $values)
+  {
+// TODO implement here 
+  }
+  
+  /**
    * @param string $query
    * @param array $values
    */
