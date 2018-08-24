@@ -23,7 +23,7 @@ abstract class Database
   /**
    * Connection handle.
    */
-  protected /*final*/ $handle;
+  protected /* final */ $handle;
 
   /**
    * Protected constructor to enforce Singleton property.
@@ -44,26 +44,32 @@ abstract class Database
   }
 
   /**
-   * @param int $id 
-   * @param string $firstName 
-   * @param string $lastName [optional]
-   * @param string $username [optional]
+   * Saves user's data
+   * 
+   * @param int $id User's Telegram ID
+   * @param string $firstName User's first name
+   * @param string $lastName [optional] User's last name
+   * @param string $username [optional] Username
    */
   public abstract function saveUser(int $id, string $firstName, string $lastName = NULL, string $username = NULL);
 
   /**
-   * @param int $id 
-   * @param string $datetime 
-   * @param int $userId 
-   * @param string $text
+   * Saves the incoming request
+   * 
+   * @param int $id Message's Telegram ID
+   * @param string $datetime Message's date and time
+   * @param int $userId User's ID
+   * @param string $text Text of the request
    */
   public abstract function saveRequest(int $id, string $datetime, int $userId, string $text);
 
   /**
-   * @param int $id 
-   * @param string $datetime 
-   * @param int $requestId 
-   * @param string $text
+   * Save a response
+   * 
+   * @param int $id Message's Telegram ID
+   * @param string $datetime Message's date and time
+   * @param int $requestId Request's ID
+   * @param string $text Text of the response
    */
   public abstract function saveResponse(int $id, string $datetime, int $requestId, string $text);
 
