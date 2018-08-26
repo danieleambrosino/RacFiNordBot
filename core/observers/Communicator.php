@@ -20,22 +20,22 @@ abstract class Communicator implements SplObserver
 {
 
   /**
-   * @var int
+   * @var int User's Telegram chat ID.
    */
   protected $chatId;
 
   /**
-   * @var int
+   * @var int Request's Telegram ID.
    */
   protected $requestId;
 
   /**
-   * @var array
+   * @var array Bot's responses.
    */
   protected $responses;
 
   /**
-   * @var Database
+   * @var Database Data Access Object.
    */
   protected $db;
 
@@ -48,6 +48,8 @@ abstract class Communicator implements SplObserver
   }
 
   /**
+   * Update method from Observer design pattern.
+   * 
    * @param SplSubject $subject
    */
   public final function update(SplSubject $subject)
@@ -62,17 +64,16 @@ abstract class Communicator implements SplObserver
       return;
     }
 
-
     $this->sendResponses();
   }
 
   /**
-   * @param string $text
+   * Send bot's responses.
    */
   protected abstract function sendResponses();
 
   /**
-   * 
+   * Alert user that the bot is computing the answer.
    */
   protected abstract function sendIsTyping();
 }
