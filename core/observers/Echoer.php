@@ -20,11 +20,11 @@ class Echoer extends Communicator
 {
 
   /**
-   * @param string text
+   * 
    */
-  protected function sendMessage(string $text)
+  protected function sendResponses()
   {
-    echo $text . PHP_EOL;
+    print_r($this->responses);
   }
 
   /**
