@@ -2692,7 +2692,7 @@
 											"top": 365,
 											"width": 166.5751953125,
 											"height": 13,
-											"text": "#sendMessage(text: string)",
+											"text": "#sendResponses()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4706,19 +4706,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFlM5k+CuxThbU="
 							},
-							"name": "sendMessage",
+							"name": "sendResponses",
 							"visibility": "protected",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAFlM5q2QO4XN3g=",
-									"_parent": {
-										"$ref": "AAAAAAFlM5pdtu3U1xg="
-									},
-									"name": "text",
-									"type": "string"
-								}
-							],
 							"isAbstract": true
 						},
 						{
