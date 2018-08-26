@@ -38,7 +38,7 @@ abstract class Communicator implements SplObserver
    * @var Database
    */
   protected $db;
-  
+
   public function __construct()
   {
     $this->db = DEVELOPMENT ? DatabaseSQLite::getInstance() : DatabaseMySQL::getInstance();
@@ -47,7 +47,7 @@ abstract class Communicator implements SplObserver
     $this->responses = [];
   }
 
-    /**
+  /**
    * @param SplSubject $subject
    */
   public final function update(SplSubject $subject)
@@ -61,17 +61,15 @@ abstract class Communicator implements SplObserver
       $this->sendIsTyping();
       return;
     }
-    
-    foreach ($this->responses as $response)
-    {
-      $this->sendMessage($response);
-    }
+
+
+    $this->sendResponses();
   }
 
   /**
    * @param string $text
    */
-  protected abstract function sendMessage(string $text);
+  protected abstract function sendResponses();
 
   /**
    * 
