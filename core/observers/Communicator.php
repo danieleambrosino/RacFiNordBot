@@ -9,6 +9,8 @@
  * file distributed with this source code.
  */
 
+require_once realpath(__DIR__ . '/../../vendor/autoload.php');
+
 /**
  * Abstract class that outputs results and saves responses to DB
  * 
@@ -36,8 +38,13 @@ abstract class Communicator implements SplObserver
    * @var Database
    */
   protected $db;
+  
+  public function __construct()
+  {
+    $this->db = DEVELOPMENT ? DatabaseSQLite::getInstance() : DatabaseMySQL::getInstance();
+  }
 
-  /**
+    /**
    * @param SplSubject $subject
    */
   public final function update(SplSubject $subject)
