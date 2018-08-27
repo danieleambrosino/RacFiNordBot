@@ -106,11 +106,11 @@ class Bot implements SplSubject
     $this->notify();
     if ( $this->request === '/start' )
     {
-      $this->responses[] = "Ciao $this->userFirstName, benvenuto!\n" . file_get_contents(ASSETS_DIR . '/info.md');
+      $this->responses[] = "Ciao $this->userFirstName, benvenuto!\n" . file_get_contents(RES_DIR . '/info.md');
     }
     elseif ( $this->request === '/info' )
     {
-      $this->responses[] = file_get_contents(ASSETS_DIR . '/info.md');
+      $this->responses[] = file_get_contents(RES_DIR . '/info.md');
     }
     elseif ( $this->request === '/prossimo_evento' || preg_match('/prossimo\s+evento/i', $this->request) )
     {
