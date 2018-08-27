@@ -62,7 +62,10 @@ class Sender extends Communicator
       curl_setopt($this->curlHandle, CURLOPT_POSTFIELDS, $postFields);
       $result = $this->performSession();
       $this->db->saveResponse(
-           $result['message_id'], date(DATETIME_FORMAT_DATABASE, $result['date']), $this->requestId, $result['text']);
+           $result['message_id'],
+           date(FORMAT_DATETIME_DATABASE, $result['date']),
+           $this->requestId,
+           $result['text']);
     }
   }
 
