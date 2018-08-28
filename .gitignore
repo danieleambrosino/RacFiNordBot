@@ -1,4 +1,5 @@
 config/
 log/
 nbproject/
+test/
 vendor/
