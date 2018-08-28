@@ -3,7 +3,7 @@
 /*
  * This file is part of the RacFiNordBot package.
  * 
- * (c) 2018 Daniele Ambrosino <mail@danieleambrosino.it>
+ * (c) 2018 Rotaract Club Firenze Nord <rotaractfirenzenord@gmail.com>
  * 
  * For the full copyright and license information, please view the LICENSE
  * file distributed with this source code.
