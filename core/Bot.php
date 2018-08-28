@@ -251,6 +251,9 @@ class Bot implements SplSubject
     $start = strftime($format, strtotime($start));
     $end = strftime($format, strtotime($end));
     
+    $start = preg_replace('/ {2,}/', ' ', $start);
+    $end = preg_replace('/ {2,}/', ' ', $end);
+    
     $notes = isset($event['description']) ? $event['description'] : 'nessuna';
     
     $response = <<<MD
