@@ -82,8 +82,10 @@ class Bot implements SplSubject
     
     $this->request = $message['text'];
     $this->requestId = $message['message_id'];
-    $this->chatId = $message['id'];
+    $this->chatId = $message['message_id'];
     $this->userFirstName = $message['from']['first_name'];
+    
+    $this->responses = [];
     
     $this->db = DEVELOPMENT ? DatabaseSQLite::getInstance() : DatabaseMySQL::getInstance();
     $this->db->saveUser(
@@ -120,7 +122,7 @@ class Bot implements SplSubject
     {
       $events = $this->getNextEvents(3);
     }
-    elseif ( preg_match('/prossimi\s+(\d+)\s+eventi/', $message, $matches) )
+    elseif ( preg_match('/prossimi\s+(\d+)\s+eventi/', $this->request, $matches) )
     {
       $maxEvents = filter_var($matches[1], FILTER_VALIDATE_INT);
       if ( $maxEvents === 0 )
@@ -234,7 +236,7 @@ class Bot implements SplSubject
     if ( isset($event['location']) )
     {
       $locationUrl = GOOGLE_MAPS_SEARCH_URL . urlencode($event['location']);
-      $location = "[$location]($locationUrl)";
+      $location = "[{$event['location']}]($locationUrl)";
     }
     else
     {

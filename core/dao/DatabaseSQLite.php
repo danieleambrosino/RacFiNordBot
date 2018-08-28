@@ -21,11 +21,16 @@ class DatabaseSQLite extends Database
 
   protected function __construct()
   {
-    $this->handle = new SQlite3(DATABASE_SQLITE_PATH);
-    parent::__construct();
+    $this->handle = new SQlite3(DATABASE_SQLITE_PATH, SQLITE3_OPEN_READWRITE);
+  }
+  
+  public function __destruct()
+  {
+    $this->handle->exec('ANALYZE');
+    parent::__destruct();
   }
 
-  /**
+    /**
    * Saves user's data
    * 
    * @param int $id User's Telegram ID
@@ -109,16 +114,22 @@ class DatabaseSQLite extends Database
    */
   protected function fetchResults($result): array
   {
-    if ( !method_exists($result, 'fetchArray') )
+    if ( !method_exists($result, 'fetchArray') ||
+         !method_exists($result, 'numColumns') )
     {
       throw new ErrorException(__METHOD__ . ': invalid object passed as parameter');
     }
 
     $results = [];
-    while ($row = $result->fetchArray(SQLITE3_ASSOC))
+
+    if ( $result->numColumns() !== 0 )
     {
-      $results[] = $row;
+      while ($row = $result->fetchArray(SQLITE3_ASSOC))
+      {
+        $results[] = $row;
+      }
     }
+
     $result->finalize();
     return $results;
   }
