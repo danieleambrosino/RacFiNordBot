@@ -26,6 +26,11 @@ class Sender extends Communicator
   {
     parent::__construct();
     $this->curlHandle = curl_init();
+    curl_setopt_array($this->curlHandle, [
+        CURLOPT_POST => TRUE,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        CURLOPT_RETURNTRANSFER => TRUE
+    ]);
     if ( FALSE === $this->curlHandle )
     {
       throw new ErrorException(__METHOD__ . ': unable to inizialize cURL handle');
@@ -38,12 +43,7 @@ class Sender extends Communicator
    */
   protected function sendResponses()
   {
-    curl_setopt_array($this->curlHandle, [
-        CURLOPT_URL => BOT_API_URL . '/sendMessage',
-        CURLOPT_POST => TRUE,
-        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
-        CURLOPT_RETURNTRANSFER => TRUE
-    ]);
+    curl_setopt($this->curlHandle, CURLOPT_URL, BOT_API_URL . '/sendMessage');
     $postFieldsArray = [
         'chat_id' => $this->chatId,
         'parse_mode' => 'Markdown'
