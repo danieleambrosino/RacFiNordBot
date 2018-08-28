@@ -61,11 +61,14 @@ class Sender extends Communicator
       }
       curl_setopt($this->curlHandle, CURLOPT_POSTFIELDS, $postFields);
       $result = $this->performSession();
-      $this->db->saveResponse(
+      if ( DATABASE_ENABLED )
+      {
+        $this->db->saveResponse(
            $result['message_id'],
            date(FORMAT_DATETIME_DATABASE, $result['date']),
            $this->requestId,
            $result['text']);
+      }
     }
   }
 
@@ -104,6 +107,14 @@ class Sender extends Communicator
     if ( $httpCode >= 500 )
     {
       throw new ErrorException(__METHOD__ . ": Telegram server error (HTTP code $httpCode");
+    }
+    if ( is_bool($rawResponse) )
+    {
+      if ( FALSE === $rawResponse )
+      {
+        throw new ErrorException(__METHOD__ . ': Telegram refused our request');
+      }
+      return TRUE;
     }
     $response = json_decode($rawResponse, TRUE);
     if ( FALSE === $response )

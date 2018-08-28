@@ -25,9 +25,16 @@ class Echoer extends Communicator
   protected function sendResponses()
   {
     print_r($this->responses);
-    foreach ($this->responses as $response)
+    if ( DATABASE_ENABLED )
     {
-      $this->db->saveResponse(rand(), date(FORMAT_DATETIME_DATABASE), $this->requestId, $response);
+      foreach ($this->responses as $response)
+      {
+        $this->db->saveResponse(
+             rand(),
+             date(FORMAT_DATETIME_DATABASE),
+             $this->requestId,
+             $response);
+      }
     }
   }
 

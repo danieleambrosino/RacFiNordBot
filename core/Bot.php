@@ -87,17 +87,20 @@ class Bot implements SplSubject
     
     $this->responses = [];
     
-    $this->db = DEVELOPMENT ? DatabaseSQLite::getInstance() : DatabaseMySQL::getInstance();
-    $this->db->saveUser(
-         $message['from']['id'],
-         $message['from']['first_name'],
-         $message['from']['last_name'],
-         $message['from']['username']);
-    $this->db->saveRequest(
-         $this->requestId,
-         date(FORMAT_DATETIME_DATABASE, $message['date']), 
-         $message['from']['id'],
-         $this->request);
+    if ( DATABASE_ENABLED )
+    {
+      $this->db = DEVELOPMENT ? DatabaseSQLite::getInstance() : DatabaseMySQL::getInstance();
+      $this->db->saveUser(
+           $message['from']['id'],
+           $message['from']['first_name'],
+           $message['from']['last_name'],
+           $message['from']['username']);
+      $this->db->saveRequest(
+           $this->requestId,
+           date(FORMAT_DATETIME_DATABASE, $message['date']), 
+           $message['from']['id'],
+           $this->request);
+    }
   }
 
   /**

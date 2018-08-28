@@ -41,7 +41,10 @@ abstract class Communicator implements SplObserver
 
   public function __construct()
   {
-    $this->db = DEVELOPMENT ? DatabaseSQLite::getInstance() : DatabaseMySQL::getInstance();
+    if ( DATABASE_ENABLED )
+    {
+      $this->db = DEVELOPMENT ? DatabaseSQLite::getInstance() : DatabaseMySQL::getInstance();
+    }
     $this->chatId = NULL;
     $this->requestId = NULL;
     $this->responses = [];
