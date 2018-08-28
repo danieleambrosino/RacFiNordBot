@@ -181,7 +181,7 @@ class Bot implements SplSubject
    */
   public function getRequestId(): int
   {
-    return $this->chatId;
+    return $this->requestId;
   }
 
   /**
