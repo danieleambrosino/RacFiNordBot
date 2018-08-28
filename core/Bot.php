@@ -82,7 +82,7 @@ class Bot implements SplSubject
     
     $this->request = $message['text'];
     $this->requestId = $message['message_id'];
-    $this->chatId = $message['message_id'];
+    $this->chatId = $message['chat']['id'];
     $this->userFirstName = $message['from']['first_name'];
     
     $this->responses = [];
