@@ -10,9 +10,10 @@
     }
   ],
   "require": {
-    "google/apiclient": "v2.2.2",
+    "php": "~7.0",
     "ext-curl": "*",
-    "ext-sqlite3": "*"
+    "ext-sqlite3": "*",
+    "google/apiclient": "v2.2.2"
   },
   "autoload": {
     "classmap": [
