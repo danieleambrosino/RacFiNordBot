@@ -18,21 +18,28 @@ if ( empty($update) )
   exit;
 }
 
-$bot = new Bot($update);
-
-$observer = DEVELOPMENT ? new Echoer() : new Sender();
-$bot->attach($observer);
-
-http_response_code(202);
-
 if ( DEVELOPMENT )
 {
+  $bot = new Bot($update);
+
+  $observer = new Echoer();
+  $bot->attach($observer);
+
+  http_response_code(202);
+  
   $bot->evaluate();
 }
 else
 {
   try
   {
+    $bot = new Bot($update);
+
+    $observer = new Sender();
+    $bot->attach($observer);
+
+    http_response_code(202);
+
     $bot->evaluate();
   } catch (Exception $ex)
   {
