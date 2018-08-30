@@ -12,7 +12,10 @@
 require_once realpath(__DIR__ . '/../vendor/autoload.php');
 
 /**
- * Computational engine
+ * Computational engine.
+ * 
+ * This class evaluates the input text from Telegram user, and computes
+ * the appropriate response.
  *
  * @author Daniele Ambrosino <mail@danieleambrosino.it>
  */
@@ -20,42 +23,66 @@ class Bot implements SplSubject
 {
 
   /**
-   * @var string
+   * Telegram user's request.
+   * 
+   * @var string The incoming request from user, stored as it is.
    */
   private $request;
 
   /**
-   * @var array
+   * Computed responses.
+   * 
+   * @var array This array stores all the computed responses to be sent.
    */
   private $responses;
 
   /**
-   * @var int
+   * Telegram chat ID.
+   * 
+   * @var int The identification number that Telegram univocally gives to the
+   * chat to which the responses must be sent.
    */
   private $chatId;
 
   /**
-   * @var int
+   * Telegram message ID.
+   * 
+   * @var int The univocal identifier of the message containing user's request.
    */
   private $requestId;
   
   /**
-   * @var string
+   * User's first name.
+   * 
+   * @var string The name that user has chosen on Telegram.
    */
   private $userFirstName;
 
   /**
-   * @var Communicator
+   * Observer that outputs responses.
+   * 
+   * @var Communicator Handles the communications with the outer and scary world.
    */
   private $communicator;
   
   /**
-   * @var Database
+   * Database handle.
+   * 
+   * @var Database Gives all the methods to store user's and request's informations.
    */
   private $db;
 
   /**
-   * @param string $update
+   * Constructs the bot.
+   * 
+   * This function tries to decode the JSON string, then checks if the update
+   * is missing some crucial information (if so, throws an ErrorException).
+   * Then, initializes all class members.
+   * If the database module is activated, stores user's and request's
+   * informations into the database.
+   * 
+   * @param string $update JSON-encoded update incoming from Telegram servers.
+   * @throws ErrorException
    */
   public function __construct(string $update)
   {
@@ -104,7 +131,12 @@ class Bot implements SplSubject
   }
 
   /**
+   * Evaluates user's request and produces the appropriate responses.
    * 
+   * This function notifies the Communicator object that evaluation started.
+   * Then, analyzes the request's text and produces the appropriate responses
+   * (eventually fetching some data from Google).
+   * Finally, notifies the Communicator that evaluation finished.
    */
   public function evaluate()
   {
@@ -161,7 +193,10 @@ class Bot implements SplSubject
   }
 
   /**
-   * @return array
+   * Returns the responses array.
+   * 
+   * @return array The array containing the evaluated responses. If no response
+   * is found, returns an empty array.
    */
   public function getResponses(): array
   {
@@ -169,7 +204,9 @@ class Bot implements SplSubject
   }
 
   /**
-   * @return int
+   * Returns the chat ID.
+
+   * @return int Telegram's chat univocal identifier.
    */
   public function getChatId(): int
   {
@@ -177,7 +214,9 @@ class Bot implements SplSubject
   }
 
   /**
-   * @return int
+   * Returns the request's ID.
+   * 
+   * @return int Request's univocal idenfifier.
    */
   public function getRequestId(): int
   {
@@ -185,7 +224,7 @@ class Bot implements SplSubject
   }
 
   /**
-   * 
+   * Notifies observer that something changed.
    */
   public function notify()
   {
@@ -193,7 +232,9 @@ class Bot implements SplSubject
   }
 
   /**
-   * @param SplObserver $observer
+   * Attaches an observer.
+   * 
+   * @param SplObserver $observer The observer to be attached.
    */
   public function attach(SplObserver $observer)
   {
@@ -201,6 +242,10 @@ class Bot implements SplSubject
   }
 
   /**
+   * Detaches an observer
+   * 
+   * Basically, sets to null the reference to the observer.
+   * 
    * @param SplObserver $observer
    */
   public function detach(SplObserver $observer)
@@ -209,7 +254,15 @@ class Bot implements SplSubject
   }
 
   /**
-   * @param int $maxResults
+   * Get the next events scheduled into Google Calendar's account.
+   * 
+   * Connects to Google Calendar using the dedicated PHP library.
+   * Then, downloads a maximum number of events depending on the value of
+   * the $maxResults parameter.
+   * Finally, returns an array containg the Google_Service_Calendar_Event objects.
+   * 
+   * @param int $maxResults The maximum number of events to be downloaded.
+   * @return array The Google_Service_Calendar_Event-s.
    */
   private function getNextEvents(int $maxResults)
   {
@@ -231,8 +284,13 @@ class Bot implements SplSubject
   }
 
   /**
-   * @param Google_Service_Calendar_Event $event
-   * @return string
+   * Creates a human-readable version of the event.
+   * 
+   * Analyzes the Google_Service_Calendar_Event passed as parameter, then
+   * writes a textual version of the event itself.
+
+   * @param Google_Service_Calendar_Event $event The Google event object.
+   * @return string The textual version of the event.
    */
   private function textifyEvent(Google_Service_Calendar_Event $event): string
   {
