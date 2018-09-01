@@ -81,9 +81,10 @@ class DatabaseSQLite extends Database
    * statement and returns the statement object. Throws an ErrorException if
    * binding fails.
    * 
-   * @param string $query
-   * @param array $values
-   * @return SQLite3Stmt
+   * @param string $query The query to be execute.
+   * @param array $values The values to be bound to the query.
+   * @return SQLite3Stmt A results set object.
+   * @throws ErrorException
    */
   protected function bind(string $query, array $values)
   {

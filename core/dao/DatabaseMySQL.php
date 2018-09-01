@@ -79,9 +79,12 @@ class DatabaseMySQL extends Database
    * statement and returns the statement object. Throws an ErrorException if
    * binding fails.
    * 
-   * @param string $query
-   * @param array $values
+   * @param string $query The query to be execute.
+   * @param array $values The values to be bound to the query.
+   * @return mysqli_result A results set object.
+   * @throws ErrorException
    */
+  
   protected function bind(string $query, array $values)
   {
     if ( !($stmt = $this->handle->prepare($query)) )
@@ -114,6 +117,7 @@ class DatabaseMySQL extends Database
    * Fetches results from a database result set.
    * 
    * @param mysqli_result $result
+   * @return array A database-independent associative array with results.
    */
   protected function fetchResults($result): array
   {
@@ -123,8 +127,8 @@ class DatabaseMySQL extends Database
   /**
    * Get the types string of the given values
    * 
-   * @param array $values
-   * @return string
+   * @param array $values Values to be evaluated.
+   * @return string The computed string.
    * @throws ErrorException
    */
   private function getTypesString(array $values)

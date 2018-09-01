@@ -18,7 +18,9 @@ abstract class Database
 {
 
   /**
-   * @var Database
+   * Static Database instance to enforce Singleton pattern.
+   * 
+   * @var Database Static data member that holds the only instance of the class.
    */
   protected static $instance;
 
@@ -32,12 +34,18 @@ abstract class Database
    */
   protected abstract function __construct();
 
+  /**
+   * Closes the database handle.
+   */
   public function __destruct()
   {
     $this->handle->close();
   }
 
   /**
+   * Singleton method that returns the class' instance, eventually creating the
+   * object if not initialized.
+   * 
    * @return Database If no Database objects have been initialized, it creates
    * a new one and returns it. Otherwise, it returns the pre-existing object.
    */
@@ -136,13 +144,14 @@ abstract class Database
    * 
    * @param string $query The query to be execute.
    * @param array $values The values to be bound to the query.
-   * @returns mixed A database results object, whose type depends on the DBMS.
+   * @return mixed A database results object, whose type depends on the DBMS.
    */
   protected abstract function bind(string $query, array $values);
 
   /**
    * Fetches results from a database result set.
    * 
+   * @param mixed $result A database-specific result set.
    * @return array A database-independent associative array with results.
    */
   protected abstract function fetchResults($result): array;
