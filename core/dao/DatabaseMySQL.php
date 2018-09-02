@@ -68,7 +68,7 @@ class DatabaseMySQL extends Database
    */
   public function saveResponse(int $id, string $datetime, int $requestId, string $text)
   {
-    $query = 'INSERT INTO Requests (id, datetime, userId, text) VALUES (?, ?, ?, ?)';
+    $query = 'INSERT INTO Responses (id, datetime, userId, text) VALUES (?, ?, ?, ?)';
     $values = [$id, $datetime, $requestId, $text];
     $this->query($query, $values);
   }
