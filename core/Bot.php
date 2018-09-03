@@ -157,7 +157,7 @@ class Bot implements SplSubject
     {
       $events = $this->getNextEvents(3);
     }
-    elseif ( preg_match('/prossimi\s+(\d+)\s+eventi/i', $this->request, $matches) )
+    elseif ( preg_match('/prossimi\s+(\d{1,2})\s+eventi/i', $this->request, $matches) )
     {
       $maxEvents = filter_var($matches[1], FILTER_VALIDATE_INT);
       if ( $maxEvents === 0 )
