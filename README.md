@@ -14,3 +14,6 @@ Il bot interpreta anche frasi vere e proprie, come ad esempio "quali sono i pros
 Il bot restituisce un messaggio che comprende il titolo dell'evento, il luogo dove si svolgerà, date di inizio e fine ed eventuali note.
 
 Se il luogo è stato stabilito, l'indirizzo riportato è un link di Google Maps che punta alla location designata.
+
+## Prova il bot!
+Il bot è attualmente operativo, ed è utilizzabile [cliccando qui](https://telegram.me/RacFiNordBot).
