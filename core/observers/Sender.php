@@ -43,7 +43,7 @@ class Sender extends Communicator
    */
   protected function sendResponses()
   {
-    curl_setopt($this->curlHandle, CURLOPT_URL, BOT_API_URL . '/sendMessage');
+    curl_setopt($this->curlHandle, CURLOPT_URL, TELEGRAM_BOT_API_URL . '/sendMessage');
     $postFieldsArray = [
         'chat_id' => $this->chatId,
         'parse_mode' => 'Markdown'
@@ -82,7 +82,7 @@ class Sender extends Communicator
     {
       throw new ErrorException(__METHOD__ . 'Cannot send "is typing": chat ID unset!');
     }
-    curl_setopt($this->curlHandle, CURLOPT_URL, BOT_API_URL . '/sendChatAction');
+    curl_setopt($this->curlHandle, CURLOPT_URL, TELEGRAM_BOT_API_URL . '/sendChatAction');
     $postFields = [
         'chat_id' => $this->chatId,
         'action' => 'typing'
