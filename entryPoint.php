@@ -45,5 +45,6 @@ else
   {
     $errorMsg = date(FORMAT_DATETIME_DATABASE) . " => {$ex->getMessage()} ({$ex->getFile()} at line {$ex->getCode()})\n{$ex->getTraceAsString()}\n";
     file_put_contents(LOG_FILE_PATH, $errorMsg, FILE_APPEND);
+    mail(LOG_EMAIL_ADDRESS, 'RacFiNordBot: error log', $errorMsg);
   }
 }
