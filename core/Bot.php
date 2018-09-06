@@ -149,6 +149,10 @@ class Bot implements SplSubject
     {
       $this->responses[] = file_get_contents(RES_DIR . '/info.md');
     }
+    elseif ( preg_match('/ciao/i', $this->request) )
+    {
+      $this->responses[] = 'Mi associo ai saluti precedentemente fatti';
+    }
     elseif ( $this->request === '/prossimo_evento' || preg_match('/prossimo\s+evento/i', $this->request) )
     {
       $events = $this->getNextEvents(1);
