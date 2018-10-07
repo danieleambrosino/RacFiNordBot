@@ -157,6 +157,10 @@ class Bot implements SplSubject
     {
       $events = $this->getNextEvents(3);
     }
+    elseif ( $this->request === '/quote_annuali' )
+    {
+      $this->responses[] = file_get_contents(RES_DIR . '/paymentInfo.md');
+    }
     elseif ( preg_match('/prossimi\s+(\d{1,2})\s+eventi/i', $this->request, $matches) )
     {
       $maxEvents = filter_var($matches[1], FILTER_VALIDATE_INT);

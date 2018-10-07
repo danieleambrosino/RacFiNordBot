@@ -1,0 +1,3 @@
+- [ ] Aggiungere **istruzioni** su come inserire gli eventi del club nel calendario
+- [ ] Aggiungere voce **"quote annuali"** che risponde con costo e IBAN
+- [x] Aggiungere funzione di **spam** per determinati ruoli

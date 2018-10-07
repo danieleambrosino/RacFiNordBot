@@ -3,7 +3,8 @@ Con questo bot puoi scoprire tutte le informazioni sui prossimi eventi del nostr
 *Ecco i comandi*:
 
 `/prossimo_evento` per i dettagli del prossimo evento
-`/prossimi_eventi` per i dettagli dei prossimi 3 eventi in programma.
+`/prossimi_eventi` per i dettagli dei prossimi 3 eventi in programma
+`/quote_annuali` per le informazioni sul pagamento delle quote annuali.
 
 Se ti stanno antipatici i comandi, puoi anche chiedere a parole; ad esempio:
 "Quali sono i prossimi 5 eventi del club?"
