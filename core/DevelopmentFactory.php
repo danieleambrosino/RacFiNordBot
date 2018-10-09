@@ -12,25 +12,31 @@
 require_once realpath(__DIR__ . '/../vendor/autoload.php');
 
 /**
- * Description of TextRequest
+ * Description of DevelopmentFactory
  *
  * @author Daniele Ambrosino
  */
-class TextRequest extends Request
+class DevelopmentFactory extends Factory
 {
 
-  private $text;
-
-  public function __construct(string $text, User $user, int $id,
-                              string $datetime)
+  public function createCommunicator(int $chatId): Communicator
   {
-    parent::__construct($user, $id, $datetime);
-    $this->text = $text;
+    return new Echoer($chatId);
   }
 
-  public function getContent(): string
+  public function createRequestDao(): RequestDao
   {
-    return $this->text;
+    return new RequestDaoSqlite();
+  }
+
+  public function createResponseDao(): ResponseDao
+  {
+    return new ResponseDaoSqlite();
+  }
+
+  public function createUserDao(): UserDao
+  {
+    return new UserDaoSqlite();
   }
 
 }

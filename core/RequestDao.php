@@ -17,13 +17,17 @@
 abstract class RequestDao
 {
 
+  /**
+   *
+   * @var Database
+   */
   protected $db;
 
   public abstract function __construct();
 
   public abstract function createRequest(Request $request);
 
-  public abstract function getRequest(int $id);
+  public abstract function getRequest(int $id): Request;
 
   public abstract function updateRequest(Request $request);
 

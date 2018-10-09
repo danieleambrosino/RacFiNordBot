@@ -9,6 +9,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file distributed with this source code.
  */
+require_once realpath(__DIR__ . '/../vendor/autoload.php');
 
 /**
  * Description of Request
@@ -28,7 +29,7 @@ abstract class Request
     $this->datetime = $datetime;
     $this->user = $user;
   }
-  
+
   public function getId()
   {
     return $this->id;
@@ -38,5 +39,12 @@ abstract class Request
   {
     return $this->datetime;
   }
+  
+  public function getUser(): User
+  {
+    return $this->user;
+  }
+  
+  public abstract function getContent(): string;
 
 }

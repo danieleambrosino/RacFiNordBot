@@ -9,6 +9,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file distributed with this source code.
  */
+require_once realpath(__DIR__ . '/../vendor/autoload.php');
 
 /**
  * Description of Responder
@@ -17,28 +18,28 @@
  */
 abstract class Responder
 {
+
   /**
    *
    * @var Request
    */
   protected $request;
-  
+
   /**
    *
    * @var array
    */
   protected $responses;
-  
+
   public function __construct(Request $request)
   {
     $this->request = $request;
   }
-  
+
   public function getResponses()
   {
     return $this->responses;
   }
 
   abstract public function run();
-
 }

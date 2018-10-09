@@ -29,7 +29,7 @@ abstract class Communicator
     $this->chatId = $chatId;
   }
   
-  abstract public function sendMessage(string $text);
+  abstract public function sendMessage(string $text): string;
   
   abstract public function sendIsTyping();
 }

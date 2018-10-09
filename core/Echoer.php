@@ -10,6 +10,8 @@
  * file distributed with this source code.
  */
 
+require_once realpath(__DIR__ . '/../vendor/autoload.php');
+
 /**
  * Description of Echoer
  *
@@ -20,6 +22,7 @@ class Echoer extends Communicator
   public function __construct(int $chatId)
   {
     parent::__construct($chatId);
+    header('Content-Type: text/plain');
   }
   
   public function sendIsTyping()
@@ -27,9 +30,15 @@ class Echoer extends Communicator
     echo "Sending message...";
   }
 
-  public function sendMessage(string $text)
+  public function sendMessage(string $text): string
   {
     echo $text;
+    return json_encode([
+      'result' => [
+        'message_id' => rand(),
+        'date' => time()
+      ]
+    ]);
   }
   
 }

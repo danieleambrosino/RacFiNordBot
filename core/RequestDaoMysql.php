@@ -11,23 +11,11 @@
  */
 
 /**
- * Description of TextResponse
+ * Description of RequestDaoMysql
  *
  * @author Daniele Ambrosino
  */
-class TextResponse extends Response
+class RequestDaoMysql
 {
-  private $text;
-  
-  public function __construct(string $text, Request $request, int $id = NULL, string $datetime = NULL)
-  {
-    parent::__construct($request, $id, $datetime);
-    $this->text = $text;
-  }
-  
-  public function getContent()
-  {
-    return $this->text;
-  }
-
+  //put your code here
 }

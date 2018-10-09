@@ -18,30 +18,20 @@ if ( empty($update) )
   exit;
 }
 
+http_response_code(202);
 if ( DEVELOPMENT )
 {
-  $bot = new Bot($update);
-
-  $observer = new Echoer();
-  $bot->attach($observer);
-
-  http_response_code(202);
-  
-  $bot->evaluate();
+  $controller = new Controller($update);
+  $controller->run();
 }
 else
 {
   try
   {
-    $bot = new Bot($update);
-
-    $observer = new Sender();
-    $bot->attach($observer);
-
-    http_response_code(202);
-
-    $bot->evaluate();
-  } catch (Exception $ex)
+    $controller = new Controller($update);
+    $controller->run();
+  }
+  catch (Exception $ex)
   {
     $errorMsg = date(FORMAT_DATETIME_DATABASE) . " => {$ex->getMessage()} ({$ex->getFile()} at line {$ex->getCode()})\n{$ex->getTraceAsString()}\n";
     file_put_contents(LOG_FILE_PATH, $errorMsg, FILE_APPEND);

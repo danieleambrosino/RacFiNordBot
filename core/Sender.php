@@ -10,6 +10,8 @@
  * file distributed with this source code.
  */
 
+require_once realpath(__DIR__ . '/../vendor/autoload.php');
+
 /**
  * Description of Sender
  *
@@ -51,7 +53,7 @@ class Sender extends Communicator
     $this->performSession();
   }
 
-  public function sendMessage(string $text)
+  public function sendMessage(string $text): string
   {
     $text = mb_convert_encoding($text, 'UTF-8');
     $postFieldsArray = [
@@ -70,7 +72,7 @@ class Sender extends Communicator
       CURLOPT_URL        => TELEGRAM_BOT_API_URL . '/sendMessage',
       CURLOPT_POSTFIELDS => $postFields
     ]);
-    $result = $this->performSession();
+    return $this->performSession();
   }
 
   private function performSession()

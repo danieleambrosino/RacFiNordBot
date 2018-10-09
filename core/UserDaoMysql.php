@@ -11,23 +11,11 @@
  */
 
 /**
- * Description of TextResponse
+ * Description of UserDaoMysql
  *
  * @author Daniele Ambrosino
  */
-class TextResponse extends Response
+class UserDaoMysql
 {
-  private $text;
-  
-  public function __construct(string $text, Request $request, int $id = NULL, string $datetime = NULL)
-  {
-    parent::__construct($request, $id, $datetime);
-    $this->text = $text;
-  }
-  
-  public function getContent()
-  {
-    return $this->text;
-  }
-
+  //put your code here
 }

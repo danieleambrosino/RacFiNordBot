@@ -10,6 +10,8 @@
  * file distributed with this source code.
  */
 
+require_once realpath(__DIR__ . '/../vendor/autoload.php');
+
 /**
  * Description of Controller
  *
@@ -60,22 +62,29 @@ class Controller
     $user = new User($this->user['id'], $this->user['first_name'],
                      $this->user['last_name'], $this->user['username']);
 
-    
-    $communicator = DEVELOPMENT ? new Echoer() : new Sender($this->chat['id']);
+    $communicator = DEVELOPMENT ? new Echoer($this->chat['id']) : new Sender($this->chat['id']);
 
-    if ( isset($this->message['text']) )
+    if ( isset($this->message['text']) ) // if the request is a textual one
     {
-      $request = new TextRequest($this->message['message_id'],
-                                 date(FORMAT_DATETIME_DATABASE), $user,
-                                      $this->message['text']);
+      $request = new TextRequest($this->message['text'], $user,
+                                 $this->message['message_id'],
+                                 date(FORMAT_DATETIME_DATABASE));
 
       $responder = new TextResponder($request);
       $communicator->sendIsTyping();
       $responder->run();
       $responses = $responder->getResponses();
-      foreach ($responses as $response)
+      foreach ($responses as &$response)
       {
-        $communicator->sendMessage($response->getText());
+        $telegramResponse = $communicator->sendMessage($response->getContent());
+        $telegramResponse = json_decode($telegramResponse, TRUE);
+        $response->setId($telegramResponse['result']['message_id']);
+        $response->setDatetime(date(FORMAT_DATETIME_DATABASE, $telegramResponse['result']['date']));
+      }
+
+      if ( DATABASE_ENABLED )
+      {
+        // salva cose
       }
     }
   }

@@ -9,6 +9,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file distributed with this source code.
  */
+require_once realpath(__DIR__ . '/../vendor/autoload.php');
 
 /**
  * Description of TextResponder
@@ -22,12 +23,8 @@ class TextResponder extends Responder
 
   public function __construct(TextRequest $request)
   {
-    if ( !($this->request instanceof TextRequest) )
-    {
-      throw new UnsupportedRequestException('Expected TextRequest, ' . $this->request::class . ' given');
-    }
     parent::__construct($request);
-    $this->requestText = $request->getText();
+    $this->requestText = $request->getContent();
   }
 
   public function run()
@@ -51,11 +48,11 @@ class TextResponder extends Responder
     $text = substr($this->requestText, 1);
     if ( $text === 'start' )
     {
-      $this->responses[] = "Ciao $this->userFirstName, benvenuto!\n" . file_get_contents(RES_DIR . '/info.md');
+      $this->responses[] = new TextResponse("Ciao {$this->request->getUser()->getFirstName()}, benvenuto!\n" . file_get_contents(RES_DIR . '/info.md'), $this->request);
     }
     elseif ( $text === 'info' )
     {
-      $this->responses[] = file_get_contents(RES_DIR . '/info.md');
+      $this->responses[] = new TextResponse(file_get_contents(RES_DIR . '/info.md'), $this->request);
     }
     elseif ( $text === 'prossimo_evento' )
     {
@@ -67,7 +64,7 @@ class TextResponder extends Responder
     }
     elseif ( $this->requestText === 'quote_annuali' )
     {
-      $this->responses[] = new TextResponse(file_get_contents(RES_DIR . '/paymentInfo.md'));
+      $this->responses[] = new TextResponse(file_get_contents(RES_DIR . '/paymentInfo.md'), $this->request);
     }
   }
 
@@ -102,11 +99,11 @@ class TextResponder extends Responder
     $events = EventFetcher::getNextEvents($max);
     if ( empty($events) )
     {
-      $this->responses[] = new TextResponse('Non ci sono eventi in programma');
+      $this->responses[] = new TextResponse('Non ci sono eventi in programma', $this->request);
     }
     foreach ($events as $event)
     {
-      $this->responses[] = new TextResponse($event);
+      $this->responses[] = new TextResponse($event, $this->request);
     }
   }
 

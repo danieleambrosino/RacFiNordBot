@@ -51,5 +51,10 @@ abstract class Response
     $this->datetime = $datetime;
   }
 
+  public function getRequest(): Request
+  {
+    return $this->request;
+  }
+
   public abstract function getContent();
 }

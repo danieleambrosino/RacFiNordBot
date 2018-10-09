@@ -17,13 +17,17 @@
 abstract class ResponseDao
 {
 
+  /**
+   *
+   * @var Database
+   */
   protected $db;
 
   public abstract function __construct();
 
   public abstract function createResponse(Response $response);
 
-  public abstract function getResponse(int $id);
+  public abstract function getResponse(int $id): Response;
 
   public abstract function updateResponse(Response $response);
 
