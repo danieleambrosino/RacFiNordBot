@@ -141,40 +141,16 @@ class Bot implements SplSubject
   public function evaluate()
   {
     $this->notify();
-    if ( $this->request === '/start' )
+    if ( substr($this->request, 0, 1) === '/' )
     {
-      $this->responses[] = "Ciao $this->userFirstName, benvenuto!\n" . file_get_contents(RES_DIR . '/info.md');
-    }
-    elseif ( $this->request === '/info' )
-    {
-      $this->responses[] = file_get_contents(RES_DIR . '/info.md');
-    }
-    elseif ( $this->request === '/prossimo_evento' || preg_match('/prossimo\s+evento/i', $this->request) )
-    {
-      $events = $this->getNextEvents(1);
-    }
-    elseif ( $this->request === '/prossimi_eventi' || preg_match('/prossimi\s+eventi/i', $this->request) )
-    {
-      $events = $this->getNextEvents(3);
-    }
-    elseif ( $this->request === '/quote_annuali' )
-    {
-      $this->responses[] = file_get_contents(RES_DIR . '/paymentInfo.md');
-    }
-    elseif ( preg_match('/prossimi\s+(\d{1,2})\s+eventi/i', $this->request, $matches) )
-    {
-      $maxEvents = filter_var($matches[1], FILTER_VALIDATE_INT);
-      if ( $maxEvents === 0 )
-      {
-        $maxEvents = 1;
-      }
-      elseif ( $maxEvents > 10 )
-      {
-        $maxEvents = 10;
-      }
-      $events = $this->getNextEvents($maxEvents);
+      $this->evaluateCommand();
     }
     else
+    {
+      $this->evaluateRegex();
+    }
+    
+    if ( FALSE )
     {
       $this->responses[] = 'Mi dispiace, non ho capito';
     }
@@ -335,4 +311,65 @@ MD;
     return $response;
   }
 
+  private function evaluateCommand()
+  {
+    if ( substr($this->request, 0, 1) !== '/' )
+    {
+      throw new ErrorException(__METHOD__ . ': not a command');
+    }
+    $text = substr($this->request, 1);
+    if ( $text === 'start' )
+    {
+      $this->responses[] = "Ciao $this->userFirstName, benvenuto!\n" . file_get_contents(RES_DIR . '/info.md');
+    }
+    elseif ( $text === 'info' )
+    {
+      $this->responses[] = file_get_contents(RES_DIR . '/info.md');
+    }
+    elseif ( $text === 'prossimo_evento' )
+    {
+      $events = $this->getNextEvents(1);
+    }
+    elseif ( $this->request === 'prossimi_eventi' )
+    {
+      $events = $this->getNextEvents(3);
+    }
+    elseif ( $this->request === 'quote_annuali' )
+    {
+      $this->responses[] = file_get_contents(RES_DIR . '/paymentInfo.md');
+    }
+    else
+    {
+      return FALSE;
+    }
+  }
+  
+  private function evaluateRegex()
+  {
+    if ( preg_match('/prossimo\s+evento/i', $this->request) )
+    {
+      $events = $this->getNextEvents(1);
+    }
+    elseif ( preg_match('/prossimi\s+eventi/i', $this->request) )
+    {
+      $events = $this->getNextEvents(3);
+    }
+    elseif ( preg_match('/prossimi\s+(\d{1,2})\s+eventi/i', $this->request, $matches) )
+    {
+      $maxEvents = filter_var($matches[1], FILTER_VALIDATE_INT);
+      if ( $maxEvents === 0 )
+      {
+        $maxEvents = 1;
+      }
+      elseif ( $maxEvents > 10 )
+      {
+        $maxEvents = 10;
+      }
+      $events = $this->getNextEvents($maxEvents);
+    }
+    else
+    {
+      return FALSE;
+    }
+  }
 }

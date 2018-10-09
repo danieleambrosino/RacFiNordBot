@@ -14,7 +14,7 @@
  * 
  * @author Daniele Ambrosino <mail@danieleambrosino.it>
  */
-abstract class Database
+abstract class Database_
 {
 
   /**

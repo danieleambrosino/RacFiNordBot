@@ -1,3 +1,4 @@
 - [ ] Aggiungere **istruzioni** su come inserire gli eventi del club nel calendario
-- [ ] Aggiungere voce **"quote annuali"** che risponde con costo e IBAN
-- [x] Aggiungere funzione di **spam** per determinati ruoli
+- [x] Aggiungere voce **"quote annuali"** che risponde con costo e IBAN
+- [ ] Aggiungere funzione di **spam** per determinati ruoli
+- [ ] Inviare una mail al segretario di richiesta di autorizzazione ad accedere al calendario
