@@ -9,26 +9,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file distributed with this source code.
  */
-require_once realpath(__DIR__ . '/../vendor/autoload.php');
-
+require_once realpath(__DIR__ . '/../../vendor/autoload.php');
 /**
- * Description of TextRequest
+ * Description of TextResponse
  *
  * @author Daniele Ambrosino
  */
-class TextRequest extends Request
+class TextResponse extends Response
 {
-
   private $text;
-
-  public function __construct(string $text, User $user, int $id,
-                              string $datetime)
+  
+  public function __construct(string $text, Request $request, int $id = NULL, string $datetime = NULL)
   {
-    parent::__construct($user, $id, $datetime);
+    parent::__construct($request, $id, $datetime);
     $this->text = $text;
   }
-
-  public function getContent(): string
+  
+  public function getContent()
   {
     return $this->text;
   }

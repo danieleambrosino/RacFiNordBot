@@ -10,7 +10,7 @@
  * file distributed with this source code.
  */
 
-require_once realpath(__DIR__ . '/../vendor/autoload.php');
+require_once realpath(__DIR__ . '/../../vendor/autoload.php');
 
 /**
  * Description of Echoer
