@@ -22,7 +22,7 @@ class Echoer extends Communicator
   public function __construct(int $chatId)
   {
     parent::__construct($chatId);
-    header('Content-Type: text/plain');
+    //header('Content-Type: text/plain');
   }
   
   public function sendIsTyping()

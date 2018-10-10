@@ -44,10 +44,9 @@ class DatabaseSqlite extends Database
     return $stmt;
   }
 
-  protected function fetchAll(SQLite3Result $result): array
+  protected function fetchAll($result): array
   {
-    if ( !method_exists($result, 'fetchArray') ||
-         !method_exists($result, 'numColumns') )
+    if ( !($result instanceof SQLite3Result) )
     {
       throw new ErrorException(__METHOD__ . ': invalid object passed as parameter');
     }

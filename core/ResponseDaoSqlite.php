@@ -20,7 +20,7 @@ class ResponseDaoSqlite extends ResponseDao
   
   public function __construct()
   {
-    $this->db = new DatabaseSqlite();
+    $this->db = DatabaseSqlite::getInstance();
   }
 
   public function createResponse(Response $response)

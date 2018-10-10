@@ -69,5 +69,5 @@ abstract class Database
 
   protected abstract function bind(string $query, array $values);
 
-  protected abstract function fetchAll($results): array;
+  protected abstract function fetchAll($result): array;
 }

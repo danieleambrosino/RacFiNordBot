@@ -40,7 +40,14 @@ class UserDaoSqlite extends UserDao
   public function getAllUsers(): array
   {
     $query = "SELECT * FROM Users";
-    return $this->db->query($query);
+    $users = $this->db->query($query);
+    $usersArray = [];
+    foreach ($users as $user)
+    {
+      $usersArray[] = new User($user['id'], $user['firstName'],
+                               $user['lastName'], $user['username']);
+    }
+    return $usersArray;
   }
 
   public function getUser(int $id): User
@@ -48,7 +55,12 @@ class UserDaoSqlite extends UserDao
     $query = "SELECT * FROM Users WHERE id = ?";
     $values = [$id];
     $userData = $this->db->query($query, $values);
-    return new User($userData['id'], $userData['firstName'], $userData['lastName'], $userData['username']);
+    if ( empty($userData) )
+    {
+      throw new ResourceNotFoundException();
+    }
+    return new User($userData[0]['id'], $userData[0]['firstName'],
+                    $userData[0]['lastName'], $userData[0]['username']);
   }
 
   public function updateUser(User $user)

@@ -62,7 +62,9 @@ class Controller
     $user = new User($this->user['id'], $this->user['first_name'],
                      $this->user['last_name'], $this->user['username']);
 
-    $communicator = DEVELOPMENT ? new Echoer($this->chat['id']) : new Sender($this->chat['id']);
+    $factory = DEVELOPMENT ? DevelopmentFactory::getInstance() : ProductionFactory()::getInstance();
+
+    $communicator = $factory->createCommunicator($this->chat['id']);
 
     if ( isset($this->message['text']) ) // if the request is a textual one
     {
@@ -79,12 +81,33 @@ class Controller
         $telegramResponse = $communicator->sendMessage($response->getContent());
         $telegramResponse = json_decode($telegramResponse, TRUE);
         $response->setId($telegramResponse['result']['message_id']);
-        $response->setDatetime(date(FORMAT_DATETIME_DATABASE, $telegramResponse['result']['date']));
+        $response->setDatetime(date(FORMAT_DATETIME_DATABASE,
+                                    $telegramResponse['result']['date']));
       }
 
       if ( DATABASE_ENABLED )
       {
-        // salva cose
+        $userDao = $factory->createUserDao();
+        try
+        {
+          $savedUser = $userDao->getUser($user->getId());
+          if ( $user != $savedUser )
+          {
+            $userDao->updateUser($user);
+          }
+        }
+        catch (ResourceNotFoundException $exc)
+        {
+          $userDao->createUser($user);
+        }
+        $requestDao = $factory->createRequestDao();
+        $requestDao->createRequest($request);
+        
+        $responseDao = $factory->createResponseDao();
+        foreach ($responses as &$response)
+        {
+          $responseDao->createResponse($response);
+        }
       }
     }
   }

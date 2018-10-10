@@ -21,7 +21,7 @@ class RequestDaoSqlite extends RequestDao
 
   public function __construct()
   {
-    $this->db = new DatabaseSqlite();
+    $this->db = DatabaseSqlite::getInstance();
   }
 
   public function createRequest(Request $request)

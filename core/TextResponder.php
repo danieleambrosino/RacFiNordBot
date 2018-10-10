@@ -58,27 +58,31 @@ class TextResponder extends Responder
     {
       $this->fetchEvents(1);
     }
-    elseif ( $this->requestText === 'prossimi_eventi' )
+    elseif ( $text === 'prossimi_eventi' )
     {
       $this->fetchEvents(3);
     }
-    elseif ( $this->requestText === 'quote_annuali' )
+    elseif ( $text === 'quote_annuali' )
     {
       $this->responses[] = new TextResponse(file_get_contents(RES_DIR . '/paymentInfo.md'), $this->request);
+    }
+    else
+    {
+      $this->responses[] = new TextResponse('Mi dispiace, non so come aiutarti!', $this->request);
     }
   }
 
   private function evaluatePhrase()
   {
-    if ( preg_match('/prossimo\s+evento/i', $this->request) )
+    if ( preg_match('/prossimo\s+evento/i', $this->requestText) )
     {
       $this->fetchEvents(1);
     }
-    elseif ( preg_match('/prossimi\s+eventi/i', $this->request) )
+    elseif ( preg_match('/prossimi\s+eventi/i', $this->requestText) )
     {
       $this->fetchEvents(3);
     }
-    elseif ( preg_match('/prossimi\s+(\d{1,2})\s+eventi/i', $this->request,
+    elseif ( preg_match('/prossimi\s+(\d{1,2})\s+eventi/i', $this->requestText,
                         $matches) )
     {
       $maxEvents = filter_var($matches[1], FILTER_VALIDATE_INT);
@@ -91,6 +95,16 @@ class TextResponder extends Responder
         $maxEvents = 10;
       }
       $this->fetchEvents($maxEvents);
+    }
+    elseif ( preg_match('/^ciao/i', $this->requestText) )
+    {
+      $this->responses[] = new TextResponse('Mi associo ai saluti precedentemente fatti',
+                                            $this->request);
+    }
+    else
+    {
+      $this->responses[] = new TextResponse('Mi dispiace, non so come aiutarti!',
+                                            $this->request);
     }
   }
 

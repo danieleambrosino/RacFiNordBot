@@ -19,7 +19,7 @@ require_once realpath(__DIR__ . '/../vendor/autoload.php');
 abstract class Factory
 {
 
-  protected $instance;
+  protected static $instance;
 
   protected function __construct()
   {
