@@ -22,8 +22,15 @@ class UserDaoSqlite extends UserDao
   {
     $this->db = DatabaseSqlite::getInstance();
   }
+  
+  public function addClubMember(User $user)
+  {
+    $query = "INSERT INTO ClubMembers (id) VALUES (?)";
+    $values = [$user->getId()];
+    $this->db->query($query, $values);
+  }
 
-  public function createUser(User $user)
+    public function createUser(User $user)
   {
     $query = "INSERT INTO Users (id, firstName, lastName, username) VALUES (?, ?, ?, ?)";
     $values = [$user->getId(), $user->getFirstName(), $user->getLastName(), $user->getUsername()];
@@ -49,8 +56,21 @@ class UserDaoSqlite extends UserDao
     }
     return $usersArray;
   }
+  
+  public function getAllBoardMembers(): array
+  {
+    $query = "SELECT * FROM Users WHERE id IN (SELECT id FROM ClubMembers WHERE roleId > 1)";
+    $members = $this->db->query($query);
+    $membersArray = [];
+    foreach ($members as $user)
+    {
+      $membersArray[] = new User($user['id'], $user['firstName'],
+                               $user['lastName'], $user['username']);
+    }
+    return $membersArray;
+  }
 
-  public function getUser(int $id): User
+    public function getUser(int $id): User
   {
     $query = "SELECT * FROM Users WHERE id = ?";
     $values = [$id];
@@ -66,19 +86,19 @@ class UserDaoSqlite extends UserDao
   public function getAllClubMembers(): array
   {
     $query = "SELECT * FROM Users WHERE id IN (SELECT id FROM ClubMembers)";
-    return $this->db->query($query);
+    $members = $this->db->query($query);
+    $membersArray = [];
+    foreach ($members as $user)
+    {
+      $membersArray[] = new User($user['id'], $user['firstName'],
+                               $user['lastName'], $user['username']);
+    }
+    return $membersArray;
   }
 
   public function getPresident(): User
   {
-    $query = <<<SQL
-SELECT U.*
-FROM Users U
-  JOIN ClubMembers CM ON U.id = CM.id
-  JOIN Roles R ON CM.roleId = R.id
-WHERE role = 'President'
-SQL;
-    return $this->db->query($query);
+    return $this->getMember('President');
   }
 
   public function getSecretary(): User
@@ -164,7 +184,7 @@ SQL;
       throw new ErrorException(__METHOD__ . ': Unexpected role');
     }
     $query = <<<SQL
-INSERT INTO ClubMembers
+INSERT OR REPLACE INTO ClubMembers
   SELECT U.id, R.id
   FROM Users U, Roles R
   WHERE U.id = {$user->getId()}

@@ -44,8 +44,22 @@ class RequestDaoSqlite extends RequestDao
     $values = [$id];
     return $this->db->query($query, $values);
   }
+  
+  public function getAllRequestsByUser(User $user): array
+  {
+    $query = "SELECT * FROM Requests WHERE userId = ?";
+    $values = [$user->getId()];
+    $requests = $this->db->query($query, $values);
+    $requestsArray = [];
+    foreach ($requests as $request)
+    {
+      $requestsArray[] = new TextRequest($request['content'], $user,
+                                         $request['id'], $request['datetime']);
+    }
+    return $requestsArray;
+  }
 
-  public function updateRequest(Request $request)
+    public function updateRequest(Request $request)
   {
     $query = "UPDATE Requests SET datetime = ?, userId = ?, content = ? WHERE id = ?";
     $values = [$request->getDatetime(), $request->getUser()->getId(), $request->getContent(), $request->getId()];

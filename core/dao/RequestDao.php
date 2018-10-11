@@ -28,6 +28,8 @@ abstract class RequestDao
   public abstract function createRequest(Request $request);
 
   public abstract function getRequest(int $id): Request;
+  
+  public abstract function getAllRequestsByUser(User $user): array;
 
   public abstract function updateRequest(Request $request);
 

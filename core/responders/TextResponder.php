@@ -41,10 +41,6 @@ class TextResponder extends Responder
 
   private function evaluateCommand()
   {
-    if ( substr($this->requestText, 0, 1) !== '/' )
-    {
-      throw new ErrorException(__METHOD__ . ': not a command');
-    }
     $text = substr($this->requestText, 1);
     if ( $text === 'start' )
     {
@@ -105,6 +101,10 @@ class TextResponder extends Responder
     {
       $this->handleCalendarAccessRequest();
     }
+    elseif ( preg_match('/^spamma @/i', $this->requestText) )
+    {
+      $this->handleSpamCommand();
+    }
     else
     {
       $this->responses[] = new TextResponse('Mi dispiace, non so come aiutarti!',
@@ -134,9 +134,9 @@ class TextResponder extends Responder
         $message = <<<TXT
 Caro segretario, {$this->request->getUser()->getFirstName()} ha richiesto l'autorizzazione ad accedere al calendario del club.
 
-Per proseguire, aggiungi l'indirizzo $emailAddress alla lista di condivisione del calendario seguendo [questo link](https://calendar.google.com/calendar/r/settings/calendar/cm90YXJhY3RmaXJlbnplbm9yZEBnbWFpbC5jb20) dall'account Google del club.
+Per proseguire, aggiungi l'indirizzo $emailAddress alla lista di condivisione del calendario [cliccando qui](https://calendar.google.com/calendar/r/settings/calendar/cm90YXJhY3RmaXJlbnplbm9yZEBnbWFpbC5jb20) dall'account Google del club.
 
-Per ulteriori istruzioni, consulta [questo link](https://support.google.com/calendar/answer/37082?hl=it)
+Per ulteriori istruzioni, [clicca qui](https://support.google.com/calendar/answer/37082?hl=it)
 TXT;
         $factory = DEVELOPMENT ? DevelopmentFactory::getInstance() : ProductionFactory::getInstance();
         $secretary = $factory->createUserDao()->getSecretary();
@@ -144,6 +144,48 @@ TXT;
         $this->responses[] = new TextResponse('Ho inoltrato la tua richiesta al segretario del club, presto riceverai una risposta!',
                                               $this->request);
       }
+  }
+  
+  private function handleSpamCommand()
+  {
+    $factory = DEVELOPMENT ? DevelopmentFactory::getInstance() : ProductionFactory::getInstance();
+    $userDao = $factory->createUserDao();
+    $president = $userDao->getPresident();
+    $secretary = $userDao->getSecretary();
+    
+    $user = $this->request->getUser();
+    if ( $user->getId() !== $president->getId() &&
+         $user->getId() !== $secretary->getId() )
+    {
+      $this->responses[] = new TextResponse('Non sei autorizzato a spammare', $this->request);
+      return;
+    }
+    
+    $text = substr($this->requestText, 9);
+    preg_match('/(\w+):\n(.+)/', $text, $matches);
+    $addressee = $matches[1];
+    $message = $matches[2];
+    switch ($addressee)
+    {
+      case 'tutti':
+        $users = $userDao->getAllUsers();
+        break;
+      case 'soci':
+        $users = $userDao->getAllClubMembers();
+        break;
+      case 'direttivo':
+        $users = $userDao->getAllBoardMembers();
+        break;
+      default:
+        return;
+    }
+    $communicator = $factory->createCommunicator(0);
+    foreach ($users as $user)
+    {
+      $communicator->setChatId($user->getId());
+      $communicator->sendMessage($message);
+    }
+    $this->responses[] = new TextResponse("Messaggio inviato @ $addressee!", $this->request);
   }
 
 }

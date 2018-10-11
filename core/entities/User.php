@@ -52,4 +52,18 @@ class User
     return $this->username;
   }
 
+  public function __toString()
+  {
+    $string = $this->firstName;
+    if ( !empty($this->lastName) )
+    {
+      $string .= ' ' . $this->lastName;
+    }
+    if ( !empty($this->username) )
+    {
+      $string .= ' (@' . $this->username . ')';
+    }
+    return $string;
+  }
+
 }

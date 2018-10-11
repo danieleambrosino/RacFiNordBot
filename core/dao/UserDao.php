@@ -26,6 +26,8 @@ abstract class UserDao
   protected $db;
 
   public abstract function __construct();
+  
+  public abstract function addClubMember(User $user);
 
   public abstract function createUser(User $user);
 
@@ -34,6 +36,8 @@ abstract class UserDao
   public abstract function getAllUsers(): array;
 
   public abstract function getAllClubMembers(): array;
+  
+  public abstract function getAllBoardMembers(): array;
 
   public abstract function getPresident(): User;
 
