@@ -62,12 +62,115 @@ class UserDaoSqlite extends UserDao
     return new User($userData[0]['id'], $userData[0]['firstName'],
                     $userData[0]['lastName'], $userData[0]['username']);
   }
+  
+  public function getAllClubMembers(): array
+  {
+    $query = "SELECT * FROM Users WHERE id IN (SELECT id FROM ClubMembers)";
+    return $this->db->query($query);
+  }
+
+  public function getPresident(): User
+  {
+    $query = <<<SQL
+SELECT U.*
+FROM Users U
+  JOIN ClubMembers CM ON U.id = CM.id
+  JOIN Roles R ON CM.roleId = R.id
+WHERE role = 'President'
+SQL;
+    return $this->db->query($query);
+  }
+
+  public function getSecretary(): User
+  {
+    return $this->getMember('Secretary');
+  }
+
+  public function getSergeantAtArms(): User
+  {
+    return $this->getMember('Sergeant At Arms');
+  }
+
+  public function getTreasurer(): User
+  {
+    return $this->getMember('Treasurer');
+  }
+
+  public function getVicePresident(): User
+  {
+    return $this->getMember('Vice President');
+  }
+
+  public function setPresident(User $user)
+  {
+    $this->setMember($user, 'President');
+  }
+
+  public function setSecretary(User $user)
+  {
+    $this->setMember($user, 'Secretary');
+  }
+
+  public function setSergeantAtArms(User $user)
+  {
+    $this->setMember($user, 'Sergeant At Arms');
+  }
+
+  public function setTreasurer(User $user)
+  {
+    $this->setMember($user, 'Treasurer');
+  }
+
+  public function setVicePresident(User $user)
+  {
+    $this->setMember($user, 'Vice President');
+  }
 
   public function updateUser(User $user)
   {
     $query = "UPDATE Users SET firstName = ?, lastName = ?, username = ? WHERE id = ?";
     $values = [$user->getFirstName(), $user->getLastName(), $user->getUsername(), $user->getId()];
     $this->db->query($query, $values);
+  }
+  
+  protected function getMember(string $role): User
+  {
+    if ( !in_array($role,
+                   ['Member', 'Counselor', 'Sergeant At Arms', 'Treasurer', 'Secretary', 'Vice President', 'President']) )
+    {
+      throw new ErrorException(__METHOD__ . ': Unexpected role');
+    }
+    $query = <<<SQL
+SELECT U.*
+FROM Users U
+  JOIN ClubMembers CM ON U.id = CM.id
+  JOIN Roles R ON CM.roleId = R.id
+WHERE role = '$role'
+SQL;
+    $userData = $this->db->query($query);
+    if ( empty($userData) )
+    {
+      throw new ResourceNotFoundException();
+    }
+    return new User($userData[0]['id'], $userData[0]['firstName'],
+                    $userData[0]['lastName'], $userData[0]['username']);
+  }
+
+  protected function setMember(User $user, string $role)
+  {
+    if ( !in_array($role,
+                   ['Member', 'Counselor', 'Sergeant At Arms', 'Treasurer', 'Secretary', 'Vice President', 'President']) )
+    {
+      throw new ErrorException(__METHOD__ . ': Unexpected role');
+    }
+    $query = <<<SQL
+INSERT INTO ClubMembers
+  SELECT U.id, R.id
+  FROM Users U, Roles R
+  WHERE U.id = {$user->getId()}
+    AND role = '$role'
+SQL;
+    $this->db->query($query);
   }
 
 }

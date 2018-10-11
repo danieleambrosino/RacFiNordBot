@@ -101,6 +101,10 @@ class TextResponder extends Responder
       $this->responses[] = new TextResponse('Mi associo ai saluti precedentemente fatti',
                                             $this->request);
     }
+    elseif ( preg_match('/^calendario/i', $this->requestText) )
+    {
+      $this->handleCalendarAccessRequest();
+    }
     else
     {
       $this->responses[] = new TextResponse('Mi dispiace, non so come aiutarti!',
@@ -119,6 +123,27 @@ class TextResponder extends Responder
     {
       $this->responses[] = new TextResponse($event, $this->request);
     }
+  }
+  
+  private function handleCalendarAccessRequest()
+  {
+    $pattern = substr(REGEX_EMAIL, 0, 2) . 'calendario\s+(' . substr(REGEX_EMAIL, 2, -3) . ')' . substr(REGEX_EMAIL, -3);
+      if ( preg_match($pattern, $this->requestText, $matches) )
+      {
+        $emailAddress = filter_var($matches[1], FILTER_VALIDATE_EMAIL);
+        $message = <<<TXT
+Caro segretario, {$this->request->getUser()->getFirstName()} ha richiesto l'autorizzazione ad accedere al calendario del club.
+
+Per proseguire, aggiungi l'indirizzo $emailAddress alla lista di condivisione del calendario seguendo [questo link](https://calendar.google.com/calendar/r/settings/calendar/cm90YXJhY3RmaXJlbnplbm9yZEBnbWFpbC5jb20) dall'account Google del club.
+
+Per ulteriori istruzioni, consulta [questo link](https://support.google.com/calendar/answer/37082?hl=it)
+TXT;
+        $factory = DEVELOPMENT ? DevelopmentFactory::getInstance() : ProductionFactory::getInstance();
+        $secretary = $factory->createUserDao()->getSecretary();
+        $factory->createCommunicator($secretary->getId())->sendMessage($message);
+        $this->responses[] = new TextResponse('Ho inoltrato la tua richiesta al segretario del club, presto riceverai una risposta!',
+                                              $this->request);
+      }
   }
 
 }

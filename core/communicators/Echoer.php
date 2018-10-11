@@ -22,17 +22,17 @@ class Echoer extends Communicator
   public function __construct(int $chatId)
   {
     parent::__construct($chatId);
-    //header('Content-Type: text/plain');
+    header('Content-Type: text/plain');
   }
   
   public function sendIsTyping()
   {
-    echo "Sending message...";
+    echo "Sending message to $this->chatId...\n\n";
   }
 
   public function sendMessage(string $text): string
   {
-    echo $text;
+    echo "--MESSAGGIO A $this->chatId--\n" . $text . "\n\n";
     return json_encode([
       'result' => [
         'message_id' => rand(),

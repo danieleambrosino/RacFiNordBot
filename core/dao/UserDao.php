@@ -10,6 +10,7 @@
  * file distributed with this source code.
  */
 require_once realpath(__DIR__ . '/../../vendor/autoload.php');
+
 /**
  * Description of UserDao
  *
@@ -23,7 +24,7 @@ abstract class UserDao
    * @var Database
    */
   protected $db;
-  
+
   public abstract function __construct();
 
   public abstract function createUser(User $user);
@@ -32,7 +33,33 @@ abstract class UserDao
 
   public abstract function getAllUsers(): array;
 
+  public abstract function getAllClubMembers(): array;
+
+  public abstract function getPresident(): User;
+
+  public abstract function getVicePresident(): User;
+
+  public abstract function getSecretary(): User;
+
+  public abstract function getTreasurer(): User;
+
+  public abstract function getSergeantAtArms(): User;
+
+  public abstract function setPresident(User $user);
+
+  public abstract function setVicePresident(User $user);
+
+  public abstract function setSecretary(User $user);
+
+  public abstract function setTreasurer(User $user);
+
+  public abstract function setSergeantAtArms(User $user);
+
   public abstract function updateUser(User $user);
 
   public abstract function deleteUser(User $user);
+  
+  protected abstract function getMember(string $role): User;
+  
+  protected abstract function setMember(User $user, string $role);
 }

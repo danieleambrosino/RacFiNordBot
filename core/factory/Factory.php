@@ -26,7 +26,7 @@ abstract class Factory
     // tadà
   }
 
-  public static function getInstance()
+  public static function getInstance(): Factory
   {
     if ( empty(static::$instance) )
     {

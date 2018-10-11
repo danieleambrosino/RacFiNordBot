@@ -12,8 +12,8 @@ Se ti stanno antipatici i comandi, puoi anche chiedere a parole; ad esempio:
 
 Se vuoi accedere al calendario digitale del club per non perderti neanche un evento, scrivi
 
-"Calendario `indirizzo@gmail.com`"
+"Calendario `indirizzo@mail.com`"
 
-con il tuo indirizzo di Gmail; riceverai al più presto l'autorizzazione ad accedere al nostro calendario Google.
+con il tuo indirizzo email; riceverai al più presto l'autorizzazione ad accedere al nostro calendario Google.
 
 Per informazioni più dettagliate, visita la nostra [pagina Facebook](https://www.facebook.com/rotaractfirenzenord) o contattaci sul nostro account ufficiale @rotaractfirenzenord!
