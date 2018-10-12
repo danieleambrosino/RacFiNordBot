@@ -153,6 +153,13 @@ class UserDaoSqlite extends UserDao
     $this->db->query($query, $values);
   }
   
+  public function removeClubMember(User $user)
+  {
+    $query = "DELETE FROM ClubMembers WHERE id = ?";
+    $values = [$user->getId()];
+    $this->db->query($query, $values);
+  }
+  
   protected function getMember(string $role): User
   {
     if ( !in_array($role,
@@ -183,13 +190,9 @@ SQL;
     {
       throw new ErrorException(__METHOD__ . ': Unexpected role');
     }
-    $query = <<<SQL
-INSERT OR REPLACE INTO ClubMembers
-  SELECT U.id, R.id
-  FROM Users U, Roles R
-  WHERE U.id = {$user->getId()}
-    AND role = '$role'
-SQL;
+    $query = "UPDATE ClubMembers SET roleId = 1 WHERE roleId = (SELECT id FROM Roles WHERE role = '$role')";
+    $this->db->query($query);
+    $query = "UPDATE ClubMembers SET roleId = (SELECT id FROM Roles WHERE role = '$role') WHERE id = {$user->getId()}";
     $this->db->query($query);
   }
 

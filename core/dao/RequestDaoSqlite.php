@@ -42,9 +42,18 @@ class RequestDaoSqlite extends RequestDao
   {
     $query = "SELECT * FROM Requests WHERE id = ?";
     $values = [$id];
-    return $this->db->query($query, $values);
+    $requestData = $this->db->query($query, $values);
+    if ( empty($requestData) )
+    {
+      throw new ResourceNotFoundException();
+    }
+    $factory = DEVELOPMENT ? DevelopmentFactory::getInstance() : ProductionFactory::getInstance();
+    $userDao = $factory->createUserDao();
+    $user = $userDao->getUser($requestData[0]['userId']);
+    return new TextRequest($requestData[0]['content'], $user,
+                           $requestData[0]['id'], $requestData[0]['datetime']);
   }
-  
+
   public function getAllRequestsByUser(User $user): array
   {
     $query = "SELECT * FROM Requests WHERE userId = ?";
@@ -59,7 +68,7 @@ class RequestDaoSqlite extends RequestDao
     return $requestsArray;
   }
 
-    public function updateRequest(Request $request)
+  public function updateRequest(Request $request)
   {
     $query = "UPDATE Requests SET datetime = ?, userId = ?, content = ? WHERE id = ?";
     $values = [$request->getDatetime(), $request->getUser()->getId(), $request->getContent(), $request->getId()];

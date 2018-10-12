@@ -28,6 +28,8 @@ abstract class ResponseDao
   public abstract function createResponse(Response $response);
 
   public abstract function getResponse(int $id): Response;
+  
+  public abstract function getAllResponsesByRequest(Request $request): array;
 
   public abstract function updateResponse(Response $response);
 

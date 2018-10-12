@@ -15,6 +15,24 @@
     "ext-sqlite3": "*",
     "google/apiclient": "v2.2.2"
   },
+  "require-dev": {
+    "components/jquery": "3.3.1",
+    "Dogfalo/materialize": "1.0.0",
+    "datatables/datatables": "1.10.18"
+  },
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "Dogfalo/materialize",
+        "version": "1.0.0",
+        "dist": {
+          "url": "https://github.com/Dogfalo/materialize/releases/download/1.0.0/materialize-v1.0.0.zip",
+          "type": "zip"
+        }
+      }
+    }
+  ],
   "autoload": {
     "classmap": [
       "core/"

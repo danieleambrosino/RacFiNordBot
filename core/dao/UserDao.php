@@ -63,6 +63,8 @@ abstract class UserDao
 
   public abstract function deleteUser(User $user);
   
+  public abstract function removeClubMember(User $user);
+  
   protected abstract function getMember(string $role): User;
   
   protected abstract function setMember(User $user, string $role);

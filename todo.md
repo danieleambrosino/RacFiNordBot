@@ -2,3 +2,4 @@
 - [x] Aggiungere voce **"quote annuali"** che risponde con costo e IBAN
 - [x] Aggiungere funzione di **spam** per determinati ruoli
 - [x] Inviare un messaggio al segretario di richiesta di autorizzazione ad accedere al calendario
+- [ ] Sanifica input, gestisci eccezioni e tutela modifica ruoli club

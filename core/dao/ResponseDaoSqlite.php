@@ -43,8 +43,22 @@ class ResponseDaoSqlite extends ResponseDao
     $values = [$id];
     return $this->db->query($query, $values);
   }
+  
+  public function getAllResponsesByRequest(Request $request): array
+  {
+    $query = "SELECT * FROM Responses WHERE requestId = ?";
+    $values = [$request->getId()];
+    $responses = $this->db->query($query, $values);
+    $responsesArray = [];
+    foreach ($responses as $response)
+    {
+      $responsesArray[] = new TextResponse($response['content'], $request,
+                                         $response['id'], $response['datetime']);
+    }
+    return $responsesArray;
+  }
 
-  public function updateResponse(Response $response)
+    public function updateResponse(Response $response)
   {
     $query = "UPDATE Responses SET datetime = ?, requestId = ?, content = ? WHERE id = ?";
     $values = [$response->getDatetime(), $response->getRequest()->getId(), $response->getContent(), $response->getId()];

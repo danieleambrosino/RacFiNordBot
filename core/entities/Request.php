@@ -45,6 +45,11 @@ abstract class Request
     return $this->user;
   }
   
+  public function __toString()
+  {
+    return "Richiesta $this->id del $this->datetime di $this->user";
+  }
+  
   public abstract function getContent(): string;
 
 }
