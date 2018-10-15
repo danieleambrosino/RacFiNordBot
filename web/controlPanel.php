@@ -18,7 +18,7 @@ require_once realpath(__DIR__ . '/templates/head.php');
 require_once realpath(__DIR__ . '/templates/nav.php');
 ?>
 <title>Pannello di controllo</title>
-<div class="container">
+<div class="container" style="overflow-x: auto">
   <h1>Pannello di controllo</h1>
   <h2>Utenti</h2>
   <table id="usersTable" class="hover">
@@ -48,7 +48,7 @@ require_once realpath(__DIR__ . '/templates/nav.php');
   </table>
 
   <h2>Soci</h2>
-  <a href="editMembers.php" class="btn">Modifica soci</a>
+  <a href="editMembers.php" class="btn">Aggiungi/rimuovi soci</a>
   <table id="membersTable">
     <thead>
       <tr>
@@ -124,6 +124,8 @@ require_once realpath(__DIR__ . '/templates/nav.php');
 </div>
 <script>
   $(function(){
-    $('table').DataTable();
+    $('#usersTable').DataTable();
+    $('#membersTable').DataTable();
+    $('select').formSelect();
   });
 </script>

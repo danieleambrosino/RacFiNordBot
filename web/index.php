@@ -1,6 +1,6 @@
 <?php
 
-/*
+/* 
  * This file is part of RacFiNordBot,
  * the official Telegram Bot of the Rotaract Club Firenze Nord.
  * 
@@ -9,19 +9,5 @@
  * For the full copyright and license information, please view the LICENSE
  * file distributed with this source code.
  */
-require_once realpath(__DIR__ . '/../../vendor/autoload.php');
 
-/**
- * Description of UserDaoMysql
- *
- * @author Daniele Ambrosino
- */
-class UserDaoMysql extends UserDao
-{
-
-  public function __construct()
-  {
-    $this->db = DatabaseMysql::getInstance();
-  }
-
-}
+header('Location: login.php');

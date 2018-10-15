@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f4973f3e36d33239c6e40e28fbf55cb2",
+    "content-hash": "f0b8b32bd7dd7b9778b4d053f43deeeb",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -766,6 +766,17 @@
             "description": "DataTables is a plug-in for the jQuery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table.",
             "homepage": "http://www.datatables.net/",
             "time": "2018-06-14T14:14:07+00:00"
+        },
+        {
+            "name": "sparksuite/simplemde-markdown-editor",
+            "version": "1.11.2",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/sparksuite/simplemde-markdown-editor/archive/1.11.2.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
         }
     ],
     "aliases": [],

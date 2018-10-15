@@ -19,9 +19,9 @@ $members = $userDao->getAllClubMembers();
 require_once realpath(__DIR__ . '/templates/head.php');
 require_once realpath(__DIR__ . '/templates/nav.php');
 ?>
-<title>Modifica soci</title>
+<title>Aggiungi/rimuovi soci</title>
 <div class="container">
-  <h1>Modifica soci</h1>
+  <h1>Aggiungi/rimuovi soci</h1>
   <button id="saveButton" class="btn">Salva modifiche</button>
   <table>
     <thead>

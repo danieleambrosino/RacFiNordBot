@@ -18,7 +18,8 @@
   "require-dev": {
     "components/jquery": "3.3.1",
     "Dogfalo/materialize": "1.0.0",
-    "datatables/datatables": "1.10.18"
+    "datatables/datatables": "1.10.18",
+    "sparksuite/simplemde-markdown-editor": "1.11.2"
   },
   "repositories": [
     {
@@ -28,6 +29,17 @@
         "version": "1.0.0",
         "dist": {
           "url": "https://github.com/Dogfalo/materialize/releases/download/1.0.0/materialize-v1.0.0.zip",
+          "type": "zip"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "sparksuite/simplemde-markdown-editor",
+        "version": "1.11.2",
+        "dist": {
+          "url": "https://github.com/sparksuite/simplemde-markdown-editor/archive/1.11.2.zip",
           "type": "zip"
         }
       }

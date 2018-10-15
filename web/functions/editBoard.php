@@ -16,6 +16,17 @@ if ( !isset($_POST['president'], $_POST['vicePresident'], $_POST['secretary'],
   exit;
 }
 
+$frequencies = array_count_values($_POST);
+foreach ($frequencies as $frequency)
+{
+  if ( $frequency >= 2 )
+  {
+    exit('Non puoi assegnare più ruoli alla stessa persona. <a href="../editBoard.php">Riprova</a>');
+  }
+}
+unset($frequencies);
+unset($frequency);
+
 require_once realpath(__DIR__ . '/../../vendor/autoload.php');
 
 $factory = DEVELOPMENT ? DevelopmentFactory::getInstance() : ProductionFactory::getInstance();

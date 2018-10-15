@@ -26,46 +26,181 @@ abstract class UserDao
   protected $db;
 
   public abstract function __construct();
-  
-  public abstract function addClubMember(User $user);
 
-  public abstract function createUser(User $user);
+  public function addClubMember(User $user)
+  {
+    $query = "INSERT INTO ClubMembers (id) VALUES (?)";
+    $values = [$user->getId()];
+    $this->db->query($query, $values);
+  }
 
-  public abstract function getUser(int $id): User;
+  public function createUser(User $user)
+  {
+    $query = "INSERT INTO Users (id, firstName, lastName, username) VALUES (?, ?, ?, ?)";
+    $values = [$user->getId(), $user->getFirstName(), $user->getLastName(), $user->getUsername()];
+    $this->db->query($query, $values);
+  }
 
-  public abstract function getAllUsers(): array;
+  public function deleteUser(User $user)
+  {
+    $query = "DELETE FROM Users WHERE id = ?";
+    $values = [$user->getId()];
+    $this->db->query($query, $values);
+  }
 
-  public abstract function getAllClubMembers(): array;
-  
-  public abstract function getAllBoardMembers(): array;
+  public function getAllUsers(): array
+  {
+    $query = "SELECT * FROM Users";
+    $users = $this->db->query($query);
+    $usersArray = [];
+    foreach ($users as $user)
+    {
+      $usersArray[] = new User($user['id'], $user['firstName'],
+                               $user['lastName'], $user['username']);
+    }
+    return $usersArray;
+  }
 
-  public abstract function getPresident(): User;
+  public function getAllBoardMembers(): array
+  {
+    $query = "SELECT * FROM Users WHERE id IN (SELECT id FROM ClubMembers WHERE roleId > 1)";
+    $members = $this->db->query($query);
+    $membersArray = [];
+    foreach ($members as $user)
+    {
+      $membersArray[] = new User($user['id'], $user['firstName'],
+                                 $user['lastName'], $user['username']);
+    }
+    return $membersArray;
+  }
 
-  public abstract function getVicePresident(): User;
+  public function getUser(int $id): User
+  {
+    $query = "SELECT * FROM Users WHERE id = ?";
+    $values = [$id];
+    $userData = $this->db->query($query, $values);
+    if ( empty($userData) )
+    {
+      throw new ResourceNotFoundException();
+    }
+    return new User($userData[0]['id'], $userData[0]['firstName'],
+                    $userData[0]['lastName'], $userData[0]['username']);
+  }
 
-  public abstract function getSecretary(): User;
+  public function getAllClubMembers(): array
+  {
+    $query = "SELECT * FROM Users WHERE id IN (SELECT id FROM ClubMembers)";
+    $members = $this->db->query($query);
+    $membersArray = [];
+    foreach ($members as $user)
+    {
+      $membersArray[] = new User($user['id'], $user['firstName'],
+                                 $user['lastName'], $user['username']);
+    }
+    return $membersArray;
+  }
 
-  public abstract function getTreasurer(): User;
+  public function getPresident(): User
+  {
+    return $this->getMember('President');
+  }
 
-  public abstract function getSergeantAtArms(): User;
+  public function getSecretary(): User
+  {
+    return $this->getMember('Secretary');
+  }
 
-  public abstract function setPresident(User $user);
+  public function getSergeantAtArms(): User
+  {
+    return $this->getMember('Sergeant At Arms');
+  }
 
-  public abstract function setVicePresident(User $user);
+  public function getTreasurer(): User
+  {
+    return $this->getMember('Treasurer');
+  }
 
-  public abstract function setSecretary(User $user);
+  public function getVicePresident(): User
+  {
+    return $this->getMember('Vice President');
+  }
 
-  public abstract function setTreasurer(User $user);
+  public function setPresident(User $user)
+  {
+    $this->setMember($user, 'President');
+  }
 
-  public abstract function setSergeantAtArms(User $user);
+  public function setSecretary(User $user)
+  {
+    $this->setMember($user, 'Secretary');
+  }
 
-  public abstract function updateUser(User $user);
+  public function setSergeantAtArms(User $user)
+  {
+    $this->setMember($user, 'Sergeant At Arms');
+  }
 
-  public abstract function deleteUser(User $user);
-  
-  public abstract function removeClubMember(User $user);
-  
-  protected abstract function getMember(string $role): User;
-  
-  protected abstract function setMember(User $user, string $role);
+  public function setTreasurer(User $user)
+  {
+    $this->setMember($user, 'Treasurer');
+  }
+
+  public function setVicePresident(User $user)
+  {
+    $this->setMember($user, 'Vice President');
+  }
+
+  public function updateUser(User $user)
+  {
+    $query = "UPDATE Users SET firstName = ?, lastName = ?, username = ? WHERE id = ?";
+    $values = [$user->getFirstName(), $user->getLastName(), $user->getUsername(), $user->getId()];
+    $this->db->query($query, $values);
+  }
+
+  public function removeClubMember(User $user)
+  {
+    $query = "DELETE FROM ClubMembers WHERE id = ?";
+    $values = [$user->getId()];
+    $this->db->query($query, $values);
+  }
+
+  protected function getMember(string $role): User
+  {
+    if ( !in_array($role,
+                   ['Member', 'Counselor', 'Sergeant At Arms', 'Treasurer', 'Secretary', 'Vice President', 'President']) )
+    {
+      throw new ErrorException(__METHOD__ . ': Unexpected role');
+    }
+    $query = <<<SQL
+SELECT U.*
+FROM Users U
+  JOIN ClubMembers CM ON U.id = CM.id
+  JOIN Roles R ON CM.roleId = R.id
+WHERE role = '$role'
+SQL;
+    $userData = $this->db->query($query);
+    if ( empty($userData) )
+    {
+      throw new ResourceNotFoundException();
+    }
+    return new User($userData[0]['id'], $userData[0]['firstName'],
+                    $userData[0]['lastName'], $userData[0]['username']);
+  }
+
+  protected function setMember(User $user, string $role)
+  {
+    if ( !in_array($role,
+                   ['Member', 'Counselor', 'Sergeant At Arms', 'Treasurer', 'Secretary', 'Vice President', 'President']) )
+    {
+      throw new ErrorException(__METHOD__ . ': Unexpected role');
+    }
+
+    $query = <<<SQL
+UPDATE ClubMembers
+SET roleId = (SELECT id FROM Roles WHERE role = '$role')
+WHERE id = {$user->getId()}
+SQL;
+    $this->db->query($query);
+  }
+
 }

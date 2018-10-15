@@ -10,6 +10,7 @@
  * file distributed with this source code.
  */
 require_once realpath(__DIR__ . '/../../vendor/autoload.php');
+
 /**
  *
  * @author Daniele Ambrosino
@@ -25,13 +26,47 @@ abstract class ResponseDao
 
   public abstract function __construct();
 
-  public abstract function createResponse(Response $response);
+  public function createResponse(Response $response)
+  {
+    $query = "INSERT INTO Responses (id, datetime, requestId, content) VALUES (?, ?, ?, ?)";
+    $values = [$response->getId(), $response->getDatetime(), $response->getRequest()->getId(), $response->getContent()];
+    $this->db->query($query, $values);
+  }
 
-  public abstract function getResponse(int $id): Response;
-  
-  public abstract function getAllResponsesByRequest(Request $request): array;
+  public function deleteResponse(Response $response)
+  {
+    $query = "DELETE FROM Responses WHERE id = ?";
+    $values = [$response->getId()];
+    $this->db->query($query, $values);
+  }
 
-  public abstract function updateResponse(Response $response);
+  public function getResponse(int $id): Response
+  {
+    $query = "SELECT * FROM Responses WHERE id = ?";
+    $values = [$id];
+    return $this->db->query($query, $values);
+  }
 
-  public abstract function deleteResponse(Response $response);
+  public function getAllResponsesByRequest(Request $request): array
+  {
+    $query = "SELECT * FROM Responses WHERE requestId = ?";
+    $values = [$request->getId()];
+    $responses = $this->db->query($query, $values);
+    $responsesArray = [];
+    foreach ($responses as $response)
+    {
+      $responsesArray[] = new TextResponse($response['content'], $request,
+                                           $response['id'],
+                                           $response['datetime']);
+    }
+    return $responsesArray;
+  }
+
+  public function updateResponse(Response $response)
+  {
+    $query = "UPDATE Responses SET datetime = ?, requestId = ?, content = ? WHERE id = ?";
+    $values = [$response->getDatetime(), $response->getRequest()->getId(), $response->getContent(), $response->getId()];
+    $this->db->query($query, $values);
+  }
+
 }

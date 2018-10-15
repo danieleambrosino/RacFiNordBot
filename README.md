@@ -10,6 +10,12 @@ Rotaract Club Firenze Nord.
 
 Il bot interpreta anche frasi come "i prossimi N eventi".
 
+Tutti gli utenti possono inviare una richiesta per accedere al calendario del club utilizzando la sintassi
+
+    Calendario indirizzo@mail.com
+inserendo il proprio indirizzo email che sarà usato come identificativo.
+Tale richiesta sarà inoltrata automaticamente al segretario del club.
+
 I soci possono richiedere informazioni sulle quote da pagare usando la funzione
 `/quote_annuali`.
 
